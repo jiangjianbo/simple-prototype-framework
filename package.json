@@ -1,0 +1,38 @@
+{
+  "name": "prototype-system",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "gen:metadata": "tsx src/metadata/generate-metadata.ts",
+    "dev": "npm run gen:metadata && vite",
+    "build": "npm run gen:metadata && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/vue-table": "^8.21.3",
+    "@unovis/ts": "^1.6.1",
+    "@unovis/vue": "^1.6.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.548.0",
+    "reka-ui": "^2.6.0",
+    "tailwind-merge": "^3.3.1",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.16",
+    "@types/node": "^22.20.5",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/test-utils": "^2.5.1",
+    "jsdom": "^30.1.3",
+    "tailwindcss": "^4.1.16",
+    "ts-morph": "^27.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^5.0.5",
+    "vue-tsc": "^2.2.12"
+  }
+}

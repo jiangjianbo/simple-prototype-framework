@@ -1,0 +1,467 @@
+{
+  "desktop": {
+    "type": "desktop",
+    "id": "back-desktop",
+    "component": "frame-with-title-and-menu-footer",
+    "children": [
+      { "slot": "icon", "component": "icon", "data": "@/brain.svg", "size": "lg" },
+      { "slot": "title", "component": "text", "data": "@title", "title": "数据安全大脑", "size": "base", "strong": true },
+      { "slot": "menu", "component": "menu-tree" },
+      { "slot": "breadcrumb", "component": "breadcrumb-auto" },
+      { "slot": "footer", "component": "text", "text": "安全运营中心 · 内部原型 v0.1", "muted": true },
+
+      {
+        "slot": "sidebar",
+        "component": "card",
+        "children": [
+          {
+            "slot": "header",
+            "component": "card-header",
+            "children": [
+              { "component": "card-title", "text": "安全公告" },
+              { "component": "card-description", "text": "由安全管理员发布" }
+            ]
+          },
+          {
+            "slot": "default",
+            "component": "row",
+            "template": "1fr",
+            "gap": 12,
+            "children": [
+              { "component": "alert", "variant": "warning", "title": "季度攻防演练", "description": "11 月 8 日 22:00 - 次日 6:00 进行红蓝对抗，期间部分接口将限流。" },
+              { "component": "alert", "variant": "info", "title": "新版本灰度", "description": "审计日志模块灰度发布中，遇到问题请反馈至 #sec-feedback。" },
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "default",
+                    "component": "row",
+                    "template": "1fr",
+                    "gap": 10,
+                    "children": [
+                      { "component": "text", "text": "基线合规率", "muted": true },
+                      { "component": "progress", "value": 86 },
+                      { "component": "text", "text": "密钥轮转进度", "muted": true },
+                      { "component": "progress", "value": 64 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "dashboard",
+        "slot": "content",
+        "title": "安全概览",
+        "description": "数据安全态势总览 · 近 30 天（图表基于 Unovis，shadcn-vue charts 同源底层）",
+        "component": "page-default",
+        "children": [
+          {
+            "component": "row",
+            "columns": 4,
+            "children": [
+              { "component": "stat-card", "title": "接入资产", "value": 1284, "delta": "12%", "tone": "up", "icon": "server", "hint": "较上月新增 138 台" },
+              { "component": "stat-card", "title": "活跃用户", "value": "86.2%", "delta": "3.1%", "tone": "up", "icon": "users", "hint": "近 7 天日活均值" },
+              { "component": "stat-card", "title": "待处理告警", "value": 12, "delta": "-8", "tone": "down", "icon": "bell", "hint": "高风险 3 · 中风险 9" },
+              { "component": "stat-card", "title": "综合风险评分", "value": 32, "delta": "良好", "tone": "default", "icon": "gauge", "hint": "0-100，越低越安全" }
+            ]
+          },
+          {
+            "component": "row",
+            "template": "1.75fr 1fr",
+            "children": [
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "风险事件趋势" },
+                      { "component": "card-description", "text": "高风险 / 中风险事件数量（chart-area）" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "chart-area",
+                    "data": "/systems/back/data/risk-trend.json",
+                    "xKey": "date",
+                    "yKeys": ["high", "medium"],
+                    "height": 280
+                  }
+                ]
+              },
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "告警类型分布" },
+                      { "component": "card-description", "text": "本月累计（chart-donut）" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "chart-donut",
+                    "data": "/systems/back/data/alert-types.json",
+                    "categoryKey": "label",
+                    "valueKey": "value",
+                    "height": 200
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "component": "row",
+            "columns": 1,
+            "children": [
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "本周处置吞吐" },
+                      { "component": "card-description", "text": "已处置 / 待处置（chart-bar，多序列堆叠）" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "chart-bar",
+                    "data": "/systems/back/data/weekly-throughput.json",
+                    "xKey": "week",
+                    "yKeys": ["resolved", "pending"],
+                    "height": 240
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "user-list",
+        "slot": "content",
+        "title": "用户列表",
+        "description": "列出全部的用户信息 · 列由 @@User 元数据自动生成 · 列表只读",
+        "component": "page-default",
+        "children": [
+          {
+            "component": "table",
+            "title": "全部用户",
+            "mode": "readonly",
+            "searchable": true,
+            "sortable": true,
+            "rows": "/systems/back/data/users.json",
+            "column": [
+              { "component": "field-placeholder", "data": "@@User", "placeholder": "搜索姓名" },
+              { "type": "element", "component": "button", "text": "新增用户", "variant": "primary", "@goto": "user-info" }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "user-info",
+        "slot": "content",
+        "title": "用户编辑",
+        "description": "页面状态机演示：浏览 → 编辑 → 提交审核（user-info.sm.md）",
+        "component": "page-default",
+        "stateMachine": "/systems/back/pages/user-info.sm.md",
+        "constants": { "$currentUserName": "张伟" },
+        "children": [
+          {
+            "component": "row",
+            "template": "1.6fr 1fr",
+            "children": [
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "用户信息" },
+                      { "component": "card-description", "text": "userInfo · 数据 @@User · mode 由状态机驱动" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "form",
+                    "id": "userInfo",
+                    "data": "@@User",
+                    "mode": "readonly",
+                    "value": {
+                      "lock": true,
+                      "id": "U-1024",
+                      "name": "张伟",
+                      "email": "zhangwei@corpsafe.cn",
+                      "age": 32,
+                      "isActive": true,
+                      "createdAt": "2023-06-01"
+                    }
+                  }
+                ]
+              },
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "审核人" },
+                      { "component": "card-description", "text": "auditor · 数据 @@Auditor" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "form",
+                    "id": "auditor",
+                    "data": "@@Auditor",
+                    "mode": "readonly",
+                    "value": {
+                      "name": "李云",
+                      "auditTime": "2026-01-12",
+                      "comment": "按季度复核权限"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "component": "card",
+            "children": [
+              {
+                "slot": "header",
+                "component": "card-header",
+                "children": [
+                  { "component": "card-title", "text": "变更登记" },
+                  { "component": "card-description", "text": "txtUser / txtDescription · readOnly 由状态机控制" }
+                ]
+              },
+              {
+                "slot": "default",
+                "component": "row",
+                "template": "1fr 1fr",
+                "children": [
+                  {
+                    "component": "form-item",
+                    "label": "用户名（txtUser）",
+                    "children": [
+                      { "component": "input", "id": "txtUser", "placeholder": "用户名" }
+                    ]
+                  },
+                  {
+                    "component": "form-item",
+                    "label": "变更说明（txtDescription）",
+                    "children": [
+                      { "component": "textarea", "id": "txtDescription", "placeholder": "填写变更原因" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "component": "row",
+            "columns": 3,
+            "children": [
+              { "component": "button", "id": "btnEdit", "text": "编辑", "variant": "outline" },
+              { "component": "button", "id": "btnSubmit", "text": "提交审核", "variant": "primary" },
+              { "component": "button", "id": "btnSave", "text": "保存修改" }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "order-list",
+        "slot": "content",
+        "title": "订单聚合",
+        "description": "TanStack Table 分组聚合按需启用：groupBy=品类 + sum(金额/数量)",
+        "component": "page-default",
+        "children": [
+          {
+            "component": "table",
+            "title": "全部订单",
+            "rows": "/systems/back/data/orders.json",
+            "searchable": true,
+            "sortable": true,
+            "groupBy": "category",
+            "aggregations": { "amount": "sum", "qty": "sum" },
+            "column": [
+              { "field": "id", "label": "订单号" },
+              { "field": "product", "label": "商品" },
+              { "field": "category", "label": "品类" },
+              { "field": "qty", "label": "数量" },
+              { "field": "amount", "label": "金额" },
+              { "field": "date", "label": "日期" },
+              { "field": "status", "label": "状态" }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "user-detail",
+        "slot": "content",
+        "title": "用户详情",
+        "description": "descriptions 只读展示 + disabled 表单（权限不足场景）",
+        "component": "page-default",
+        "children": [
+          {
+            "component": "row",
+            "template": "1.6fr 1fr",
+            "children": [
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "基本信息" },
+                      { "component": "card-description", "text": "descriptions · @@User · readonly" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "descriptions",
+                    "data": "@@User",
+                    "mode": "readonly",
+                    "value": {
+                      "id": "U-1024",
+                      "name": "张伟",
+                      "email": "zhangwei@corpsafe.cn",
+                      "age": 32,
+                      "isActive": true,
+                      "createdAt": "2023-06-01",
+                      "roles": [
+                        { "id": 1, "name": "安全管理员" },
+                        { "id": 3, "name": "审计员" }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "角色信息（disabled）" },
+                      { "component": "card-description", "text": "form · @@Role · mode=disabled 自动注入 disabled" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "form",
+                    "data": "@@Role",
+                    "mode": "disabled",
+                    "columns": 1,
+                    "value": {
+                      "id": 3,
+                      "name": "审计员",
+                      "level": 7,
+                      "desc": "只读审计与导出权限"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "component": "row",
+            "columns": 1,
+            "children": [
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "default",
+                    "component": "row",
+                    "template": "auto 1fr",
+                    "gap": 12,
+                    "children": [
+                      { "component": "button", "text": "返回列表", "variant": "secondary", "@goto": "user-list" },
+                      { "component": "alert", "variant": "info", "title": "覆盖式导航", "description": "点击「返回列表」触发 @goto：目标 page 原地替换当前 page，面包屑自动截断。" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "system-settings",
+        "slot": "content",
+        "title": "系统设置",
+        "description": "edit 模式表单 · 决策矩阵：string→input / number→input-number / boolean→switch / Date→date-picker",
+        "component": "page-default",
+        "children": [
+          {
+            "component": "card",
+            "children": [
+              {
+                "slot": "header",
+                "component": "card-header",
+                "children": [
+                  { "component": "card-title", "text": "基础配置" },
+                  { "component": "card-description", "text": "form · @@Setting · mode=edit · 字段选项由 fieldOptions 声明" }
+                ]
+              },
+              {
+                "slot": "default",
+                "component": "form",
+                "data": "@@Setting",
+                "mode": "edit",
+                "fieldOptions": {
+                  "theme": [
+                    { "label": "浅色", "value": "light" },
+                    { "label": "深色", "value": "dark" },
+                    { "label": "跟随系统", "value": "auto" }
+                  ],
+                  "logLevel": [
+                    { "label": "调试 DEBUG", "value": "debug" },
+                    { "label": "信息 INFO", "value": "info" },
+                    { "label": "警告 WARN", "value": "warn" },
+                    { "label": "错误 ERROR", "value": "error" }
+                  ]
+                },
+                "value": {
+                  "siteName": "数据安全大脑",
+                  "theme": "light",
+                  "logLevel": "info",
+                  "maxSessions": 3,
+                  "mfaEnabled": true,
+                  "retentionDays": 180,
+                  "maintenanceAt": "2026-11-08"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

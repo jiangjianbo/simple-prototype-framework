@@ -1,0 +1,23 @@
+{
+  "title": "数据安全大脑",
+  "items": [
+    { "label": "安全概览", "pageId": "dashboard", "icon": "layout-dashboard" },
+    {
+      "label": "用户管理",
+      "icon": "users",
+      "children": [
+        { "label": "用户列表", "pageId": "user-list", "icon": "list-todo" },
+        { "label": "用户编辑", "pageId": "user-info", "icon": "pencil" },
+        { "label": "用户详情", "pageId": "user-detail", "icon": "eye" }
+      ]
+    },
+    { "label": "订单管理", "pageId": "order-list", "icon": "package" },
+    {
+      "label": "系统管理",
+      "icon": "settings",
+      "children": [
+        { "label": "系统设置", "pageId": "system-settings", "icon": "settings" }
+      ]
+    }
+  ]
+}

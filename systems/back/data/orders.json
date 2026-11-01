@@ -1,0 +1,22 @@
+[
+  { "id": "SO-24001", "product": "ThinkPad X1 Carbon", "category": "电子产品", "qty": 2, "amount": 25998, "date": "2026-09-03", "status": "已完成" },
+  { "id": "SO-24002", "product": "Dell U3223QE 显示器", "category": "电子产品", "qty": 6, "amount": 25194, "date": "2026-09-05", "status": "已完成" },
+  { "id": "SO-24003", "product": "A4 复印纸（箱）", "category": "办公用品", "qty": 40, "amount": 5160, "date": "2026-09-08", "status": "已完成" },
+  { "id": "SO-24004", "product": "企业微信年费", "category": "软件订阅", "qty": 120, "amount": 36000, "date": "2026-09-12", "status": "进行中" },
+  { "id": "SO-24005", "product": "会议室保洁服务", "category": "生活服务", "qty": 12, "amount": 4800, "date": "2026-09-15", "status": "已完成" },
+  { "id": "SO-24006", "product": "MacBook Pro 14", "category": "电子产品", "qty": 3, "amount": 44997, "date": "2026-09-18", "status": "进行中" },
+  { "id": "SO-24007", "product": "白色板擦笔套装", "category": "办公用品", "qty": 25, "amount": 1125, "date": "2026-09-21", "status": "已完成" },
+  { "id": "SO-24008", "product": "Jira Software 年费", "category": "软件订阅", "qty": 60, "amount": 52800, "date": "2026-09-24", "status": "已取消" },
+  { "id": "SO-24009", "product": "团建拓展训练", "category": "生活服务", "qty": 45, "amount": 22500, "date": "2026-09-27", "status": "已完成" },
+  { "id": "SO-24010", "product": "Logitech MX Keys", "category": "电子产品", "qty": 10, "amount": 7990, "date": "2026-10-06", "status": "已完成" },
+  { "id": "SO-24011", "product": "档案盒（批）", "category": "办公用品", "qty": 80, "amount": 3200, "date": "2026-10-09", "status": "进行中" },
+  { "id": "SO-24012", "product": "GitHub Enterprise", "category": "软件订阅", "qty": 30, "amount": 56700, "date": "2026-10-12", "status": "进行中" },
+  { "id": "SO-24013", "product": "员工体检套餐", "category": "生活服务", "qty": 58, "amount": 46400, "date": "2026-10-15", "status": "已完成" },
+  { "id": "SO-24014", "product": "iPhone 17 Pro", "category": "电子产品", "qty": 4, "amount": 39996, "date": "2026-10-18", "status": "已取消" },
+  { "id": "SO-24015", "product": "激光打印机 HP 4102", "category": "电子产品", "qty": 2, "amount": 8396, "date": "2026-10-21", "status": "已完成" },
+  { "id": "SO-24016", "product": "笔记本定制印刷", "category": "办公用品", "qty": 200, "amount": 6000, "date": "2026-10-24", "status": "已完成" },
+  { "id": "SO-24017", "product": "Confluence 年费", "category": "软件订阅", "qty": 45, "amount": 24300, "date": "2026-10-27", "status": "进行中" },
+  { "id": "SO-24018", "product": "下午茶供应商月结", "category": "生活服务", "qty": 22, "amount": 11000, "date": "2026-10-30", "status": "已完成" },
+  { "id": "SO-24019", "product": "iPad Air 测试机", "category": "电子产品", "qty": 5, "amount": 23995, "date": "2026-11-01", "status": "进行中" },
+  { "id": "SO-24020", "product": "碎纸机（大功率）", "category": "办公用品", "qty": 3, "amount": 2697, "date": "2026-11-02", "status": "已完成" }
+]

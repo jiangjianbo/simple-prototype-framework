@@ -1,0 +1,7 @@
+[
+  { "label": "越权访问", "value": 32 },
+  { "label": "异常导出", "value": 24 },
+  { "label": "弱口令", "value": 18 },
+  { "label": "暴力破解", "value": 12 },
+  { "label": "敏感操作", "value": 9 }
+]

@@ -1,0 +1,12 @@
+[
+  { "id": "MO-8801", "product": "企业微信年费（个人版）", "qty": 1, "amount": 288, "date": "2026-08-14", "status": "已完成" },
+  { "id": "MO-8802", "product": "机械键盘 K870", "qty": 1, "amount": 599, "date": "2026-08-30", "status": "已完成" },
+  { "id": "MO-8803", "product": "云盘会员季卡", "qty": 1, "amount": 98, "date": "2026-09-12", "status": "已完成" },
+  { "id": "MO-8804", "product": "4K 显示器挂架", "qty": 2, "amount": 396, "date": "2026-09-21", "status": "已完成" },
+  { "id": "MO-8805", "product": "降噪耳机 Pro", "qty": 1, "amount": 1299, "date": "2026-10-02", "status": "已完成" },
+  { "id": "MO-8806", "product": "办公椅人体工学", "qty": 1, "amount": 1580, "date": "2026-10-11", "status": "运输中" },
+  { "id": "MO-8807", "product": "Python 进阶课程", "qty": 1, "amount": 299, "date": "2026-10-18", "status": "已完成" },
+  { "id": "MO-8808", "product": "桌面升降架", "qty": 1, "amount": 899, "date": "2026-10-25", "status": "运输中" },
+  { "id": "MO-8809", "product": "AI 编程助手年费", "qty": 1, "amount": 680, "date": "2026-10-30", "status": "已完成" },
+  { "id": "MO-8810", "product": "无线充电板", "qty": 2, "amount": 316, "date": "2026-11-01", "status": "待付款" }
+]

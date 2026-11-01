@@ -1,0 +1,23 @@
+function UiOptions(options: { label: string; desc?: string }) {
+  return (_target: any, _key: string) => {}
+}
+
+export class MyOrder {
+  @UiOptions({ label: '订单号' })
+  id: string;
+
+  @UiOptions({ label: '商品' })
+  product: string;
+
+  @UiOptions({ label: '数量' })
+  qty: number;
+
+  @UiOptions({ label: '金额' })
+  amount: number;
+
+  @UiOptions({ label: '下单日期' })
+  date: Date;
+
+  @UiOptions({ label: '状态' })
+  status: string;
+}

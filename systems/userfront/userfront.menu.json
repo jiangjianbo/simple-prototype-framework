@@ -1,0 +1,8 @@
+{
+  "title": "用户中心",
+  "items": [
+    { "label": "工作台", "pageId": "home", "icon": "layout-dashboard" },
+    { "label": "个人资料", "pageId": "profile", "icon": "user-pen" },
+    { "label": "我的订单", "pageId": "orders", "icon": "shopping-cart" }
+  ]
+}

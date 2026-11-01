@@ -1,0 +1,223 @@
+{
+  "type": "desktop",
+  "id": "userfront-desktop",
+  "component": "frame-with-title-and-menu-footer",
+  "children": [
+    {
+      "slot": "icon",
+      "component": "icon",
+      "data": "@/logo.svg",
+      "size": "lg"
+    },
+    {
+      "slot": "title",
+      "component": "text",
+      "data": "@title",
+      "title": "用户中心",
+      "size": "base",
+      "strong": true
+    },
+    {
+      "slot": "menu",
+      "component": "menu-tree"
+    },
+    {
+      "slot": "breadcrumb",
+      "component": "breadcrumb-auto"
+    },
+    {
+      "slot": "footer",
+      "component": "text",
+      "text": "用户中心 · 内部原型 v0.1",
+      "muted": true
+    },
+    {
+      "slot": "sidebar",
+      "component": "card",
+      "children": [
+        {
+          "slot": "header",
+          "component": "card-header",
+          "children": [
+            { "component": "card-title", "text": "小贴士" },
+            { "component": "card-description", "text": "使用帮助" }
+          ]
+        },
+        {
+          "slot": "default",
+          "component": "row",
+          "template": "1fr",
+          "gap": 12,
+          "children": [
+            {
+              "component": "alert",
+              "variant": "info",
+              "title": "完善资料",
+              "description": "补全部门与职位信息后，审批流程会自动带上你的部门信息。"
+            },
+            {
+              "component": "alert",
+              "variant": "success",
+              "title": "账号安全",
+              "description": "你的账号已开启登录二次验证，最近一次登录来自本机。"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "home",
+      "slot": "content",
+      "title": "工作台",
+      "description": "你好，欢迎回来 —— 这里汇总了你的常用信息",
+      "component": "page-default",
+      "children": [
+        {
+          "component": "row",
+          "columns": 3,
+          "children": [
+            {
+              "component": "stat-card",
+              "title": "本月消费",
+              "value": "¥ 3,864",
+              "delta": "-8%",
+              "tone": "down",
+              "icon": "wallet",
+              "hint": "较上月节省 338 元"
+            },
+            {
+              "component": "stat-card",
+              "title": "进行中订单",
+              "value": 3,
+              "delta": "2",
+              "tone": "up",
+              "icon": "package",
+              "hint": "1 个包裹运输中"
+            },
+            {
+              "component": "stat-card",
+              "title": "资料完成度",
+              "value": "80%",
+              "icon": "user-pen",
+              "hint": "还差紧急联系人"
+            }
+          ]
+        },
+        {
+          "component": "card",
+          "children": [
+            {
+              "slot": "header",
+              "component": "card-header",
+              "children": [
+                { "component": "card-title", "text": "近 6 个月消费趋势" },
+                { "component": "card-description", "text": "单位：元" }
+              ]
+            },
+            {
+              "slot": "default",
+              "component": "chart-area",
+              "id": "spend-trend",
+              "height": 260,
+              "xKey": "month",
+              "series": [
+                { "key": "spend", "label": "消费" },
+                { "key": "budget", "label": "预算" }
+              ],
+              "data": "/systems/userfront/data/monthly-spend.json"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "profile",
+      "slot": "content",
+      "title": "个人资料",
+      "description": "维护你在组织内的基本信息",
+      "component": "page-default",
+      "children": [
+        {
+          "component": "card",
+          "children": [
+            {
+              "slot": "header",
+              "component": "card-header",
+              "children": [
+                { "component": "card-title", "text": "基本信息" },
+                { "component": "card-description", "text": "带 * 的字段提交后需要管理员审核" }
+              ]
+            },
+            {
+              "slot": "default",
+              "component": "form",
+              "id": "profileForm",
+              "model": "@@Profile",
+              "mode": "edit",
+              "columns": 2,
+              "value": "/systems/userfront/data/profile.json",
+              "children": [
+                {
+                  "slot": "footer",
+                  "component": "row",
+                  "template": "auto auto",
+                  "gap": 10,
+                  "children": [
+                    { "component": "button", "text": "保存修改", "variant": "primary" },
+                    { "component": "button", "text": "重置", "variant": "outline" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "orders",
+      "slot": "content",
+      "title": "我的订单",
+      "description": "全部订阅与商城订单",
+      "component": "page-default",
+      "children": [
+        {
+          "component": "card",
+          "children": [
+            {
+              "slot": "header",
+              "component": "card-header",
+              "children": [
+                { "component": "card-title", "text": "订单记录" },
+                { "component": "card-description", "text": "点击列头可排序，支持关键词过滤" }
+              ]
+            },
+            {
+              "slot": "default",
+              "component": "table",
+              "id": "orderTable",
+              "rows": "/systems/userfront/data/my-orders.json",
+              "searchable": true,
+              "sortable": true,
+              "paginated": true,
+              "pageSize": 8,
+              "column": [
+                { "component": "field-placeholder", "field": "@@MyOrder.id" },
+                { "component": "field-placeholder", "field": "@@MyOrder.product" },
+                { "component": "field-placeholder", "field": "@@MyOrder.qty", "align": "right" },
+                { "component": "field-placeholder", "field": "@@MyOrder.amount", "align": "right", "format": "currency" },
+                { "component": "field-placeholder", "field": "@@MyOrder.date" },
+                { "component": "field-placeholder", "field": "@@MyOrder.status" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

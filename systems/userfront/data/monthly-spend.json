@@ -1,0 +1,8 @@
+[
+  { "month": "6月", "spend": 2860, "budget": 3500 },
+  { "month": "7月", "spend": 3320, "budget": 3500 },
+  { "month": "8月", "spend": 4204, "budget": 4000 },
+  { "month": "9月", "spend": 2980, "budget": 3500 },
+  { "month": "10月", "spend": 3197, "budget": 3500 },
+  { "month": "11月", "spend": 3864, "budget": 4000 }
+]

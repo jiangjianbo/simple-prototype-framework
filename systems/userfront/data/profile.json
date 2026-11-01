@@ -1,0 +1,10 @@
+{
+  "name": "张伟",
+  "email": "zhangwei@corpsafe.cn",
+  "phone": "138-0000-1234",
+  "department": "安全运营部",
+  "position": "高级安全工程师",
+  "joinDate": "2023-06-01",
+  "bio": "专注数据安全与合规，喜欢把复杂的安全策略讲成人话。",
+  "notifyEnabled": true
+}

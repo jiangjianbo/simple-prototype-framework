@@ -1,0 +1,18 @@
+[
+  { "id": "U-1001", "name": "张伟", "email": "zhangwei@corpsafe.cn", "age": 32, "isActive": true, "createdAt": "2023-06-01", "roles": [{ "id": 1, "name": "安全管理员" }, { "id": 3, "name": "审计员" }] },
+  { "id": "U-1002", "name": "李云", "email": "liyun@corpsafe.cn", "age": 29, "isActive": true, "createdAt": "2023-07-14", "roles": [{ "id": 3, "name": "审计员" }] },
+  { "id": "U-1003", "name": "王芳", "email": "wangfang@corpsafe.cn", "age": 27, "isActive": false, "createdAt": "2023-09-02", "roles": [{ "id": 2, "name": "运维工程师" }] },
+  { "id": "U-1004", "name": "刘洋", "email": "liuyang@corpsafe.cn", "age": 35, "isActive": true, "createdAt": "2023-10-11", "roles": [{ "id": 1, "name": "安全管理员" }] },
+  { "id": "U-1005", "name": "陈静", "email": "chenjing@corpsafe.cn", "age": 31, "isActive": true, "createdAt": "2024-01-05", "roles": [{ "id": 2, "name": "运维工程师" }, { "id": 4, "name": "访客" }] },
+  { "id": "U-1006", "name": "杨帆", "email": "yangfan@corpsafe.cn", "age": 26, "isActive": true, "createdAt": "2024-02-19", "roles": [{ "id": 4, "name": "访客" }] },
+  { "id": "U-1007", "name": "赵敏", "email": "zhaomin@corpsafe.cn", "age": 33, "isActive": false, "createdAt": "2024-03-27", "roles": [{ "id": 2, "name": "运维工程师" }] },
+  { "id": "U-1008", "name": "黄强", "email": "huangqiang@corpsafe.cn", "age": 40, "isActive": true, "createdAt": "2024-05-08", "roles": [{ "id": 1, "name": "安全管理员" }, { "id": 2, "name": "运维工程师" }] },
+  { "id": "U-1009", "name": "周琳", "email": "zhoulin@corpsafe.cn", "age": 28, "isActive": true, "createdAt": "2024-07-23", "roles": [{ "id": 3, "name": "审计员" }] },
+  { "id": "U-1010", "name": "吴刚", "email": "wugang@corpsafe.cn", "age": 37, "isActive": true, "createdAt": "2024-09-16", "roles": [{ "id": 4, "name": "访客" }] },
+  { "id": "U-1011", "name": "徐婷", "email": "xuting@corpsafe.cn", "age": 24, "isActive": false, "createdAt": "2025-01-30", "roles": [{ "id": 2, "name": "运维工程师" }] },
+  { "id": "U-1012", "name": "孙浩", "email": "sunhao@corpsafe.cn", "age": 30, "isActive": true, "createdAt": "2025-03-12", "roles": [{ "id": 1, "name": "安全管理员" }, { "id": 3, "name": "审计员" }] },
+  { "id": "U-1013", "name": "马丽", "email": "mali@corpsafe.cn", "age": 34, "isActive": true, "createdAt": "2025-05-21", "roles": [{ "id": 3, "name": "审计员" }] },
+  { "id": "U-1014", "name": "朱磊", "email": "zhulei@corpsafe.cn", "age": 25, "isActive": true, "createdAt": "2025-08-04", "roles": [{ "id": 4, "name": "访客" }] },
+  { "id": "U-1015", "name": "胡雪", "email": "huxue@corpsafe.cn", "age": 29, "isActive": false, "createdAt": "2025-10-17", "roles": [{ "id": 2, "name": "运维工程师" }, { "id": 4, "name": "访客" }] },
+  { "id": "U-1016", "name": "郭涛", "email": "guotao@corpsafe.cn", "age": 38, "isActive": true, "createdAt": "2026-01-09", "roles": [{ "id": 1, "name": "安全管理员" }] }
+]

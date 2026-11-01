@@ -1,0 +1,9 @@
+[
+  { "week": "周一", "resolved": 18, "pending": 6 },
+  { "week": "周二", "resolved": 22, "pending": 9 },
+  { "week": "周三", "resolved": 15, "pending": 4 },
+  { "week": "周四", "resolved": 26, "pending": 11 },
+  { "week": "周五", "resolved": 31, "pending": 7 },
+  { "week": "周六", "resolved": 9, "pending": 2 },
+  { "week": "周日", "resolved": 6, "pending": 1 }
+]
