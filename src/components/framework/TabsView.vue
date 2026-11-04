@@ -7,8 +7,14 @@
 
 import { computed, defineComponent, h, type PropType, type VNode } from 'vue'
 import type { Node } from '@/framework/types'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { resolveComponent } from '@/registry'
 import { NodeRenderer, useRenderCtx } from '@/framework/renderer'
+
+// 标签页原语经契约解析（随套件变形）
+const Tabs = resolveComponent('tabs-root')!
+const TabsList = resolveComponent('tabs-list')!
+const TabsTrigger = resolveComponent('tabs-trigger')!
+const TabsContent = resolveComponent('tabs-content')!
 
 const props = defineProps<{
   __nodes?: Node[]

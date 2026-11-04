@@ -9,8 +9,11 @@ import { computed } from 'vue'
 import type { FieldMeta } from '@/framework/types'
 import { isRefType } from '@/framework/metadata'
 import { formatDate, formatNumber } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
-import ReadonlyBoolean from './ReadonlyBoolean.vue'
+import { resolveComponent } from '@/registry'
+
+// 徽章与布尔徽章经契约解析（随套件变形）
+const Badge = resolveComponent('badge')!
+const BooleanBadge = resolveComponent('boolean-badge')!
 
 const props = defineProps<{
   meta?: FieldMeta | null
@@ -35,7 +38,7 @@ const listIsObjects = computed(() => list.value.length > 0 && typeof list.value[
 
 <template>
   <span v-if="empty" class="text-muted-foreground/60">-</span>
-  <ReadonlyBoolean v-else-if="isBool" :value="value" />
+  <BooleanBadge v-else-if="isBool" :value="value" />
   <div v-else-if="Array.isArray(value)" class="flex flex-wrap items-center gap-1">
     <Badge v-for="(item, i) in list.slice(0, 4)" :key="i" variant="secondary">
       {{ listIsObjects ? pickName(item) : String(item) }}

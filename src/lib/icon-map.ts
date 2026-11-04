@@ -6,11 +6,11 @@
 import {
   Activity, Bell, Brain, Calendar, Check, ChartColumn, ChevronDown, ChevronLeft,
   ChevronRight, CircleUser, Clock, Cpu, Database, Eye, FileText, FolderClosed,
-  Gauge, Globe, Home, Inbox, Info, KeyRound, Layers, LayoutDashboard, LayoutGrid,
-  ListTodo, Lock, LogOut, Mail, MapPin, Menu, MessageSquare, Package, Pencil,
-  Phone, Plus, Save, Search, Server, Settings, ShieldAlert, ShieldCheck,
-  ShoppingCart, Star, Table2, TrendingDown, TrendingUp, TriangleAlert, User,
-  UserCog, Users, X, Zap, type LucideIcon,
+  Gauge, Globe, History, Home, Inbox, Info, KeyRound, Layers, LayoutDashboard,
+  LayoutGrid, ListTodo, Lock, LogOut, Mail, MapPin, Menu, MessageSquare, Package,
+  Pencil, Phone, Plus, Presentation, Save, Search, Server, Settings, ShieldAlert,
+  ShieldCheck, ShoppingCart, Star, Table2, Tags, Trash2, TrendingDown, TrendingUp,
+  TriangleAlert, User, UserCog, Users, X, Zap, type LucideIcon,
 } from 'lucide-vue-next'
 
 const MAP: Record<string, LucideIcon> = {
@@ -32,7 +32,7 @@ const MAP: Record<string, LucideIcon> = {
   folder: FolderClosed,
   gauge: Gauge,
   globe: Globe,
-  home: Home,
+  history: History,
   inbox: Inbox,
   info: Info,
   'key-round': KeyRound,
@@ -50,6 +50,7 @@ const MAP: Record<string, LucideIcon> = {
   phone: Phone,
   pie: ChartColumn,
   plus: Plus,
+  presentation: Presentation,
   save: Save,
   search: Search,
   server: Server,
@@ -59,6 +60,8 @@ const MAP: Record<string, LucideIcon> = {
   'shopping-cart': ShoppingCart,
   star: Star,
   table: Table2,
+  tags: Tags,
+  'trash-2': Trash2,
   'triangle-alert': TriangleAlert,
   'trending-down': TrendingDown,
   'trending-up': TrendingUp,

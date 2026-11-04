@@ -1,0 +1,12 @@
+[
+  { "id": "folder-all", "label": "全部文档", "count": 128, "children": [
+    { "id": "folder-marketing", "label": "市场推广", "count": 46, "children": [
+      { "id": "folder-launch", "label": "发布会", "count": 12 },
+      { "id": "folder-case", "label": "客户案例", "count": 18 }
+    ]},
+    { "id": "folder-sales", "label": "销售物料", "count": 38 },
+    { "id": "folder-inner", "label": "内部资料", "count": 32 },
+    { "id": "folder-product", "label": "产品文档", "count": 12 }
+  ]},
+  { "id": "folder-archive", "label": "归档", "count": 24 }
+]

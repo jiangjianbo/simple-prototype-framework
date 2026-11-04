@@ -1,142 +1,73 @@
 /**
- * 全量组件注册表（§7.1）——kebab-case 注册名与 JSON `component` 字段一致。
+ * 组件契约注册表（§7.1 / §15）——kebab-case 契约名与 JSON `component` 字段一致。
  *
- * 技术栈映射：原设计基于 Element Plus；本实现按 shadcn-vue（reka-ui + Tailwind）
- * 提供「等价语义组件」：
- *   button→Button、input→Input、switch→Switch、date-picker→DatePicker(native)、
- *   table→TanStack DataTable、select→reka-ui Select 复合、tag→Badge、
- *   descriptions→DescriptionsView、divider→Separator …
- * 图表基于 Unovis（shadcn-vue charts 官方底层），复杂表格基于 TanStack Table。
+ * 架构（套件化）：
+ *   - 契约名只是「语义槽位」，具体实现由当前套件（Kit）决定，运行时经
+ *     resolveComponent(name) 解析；renderer 持有的 registry 是其 Proxy 视图。
+ *   - 套件 = Record<契约名, Component> 的部分映射（src/kits/shadcn.ts、src/kits/plain.ts），
+ *     未覆盖的契约名回落到默认套件 shadcn（部分覆盖是套件的正式特性）。
+ *   - 套件与主题（CSS 变量，src/style.css）正交，可自由组合。
+ *
+ * 旧名兼容：组件重命名后，旧契约名经 COMPONENT_ALIASES 映射到新名，存量 JSON 不受影响。
  */
 
 import type { Component } from 'vue'
+import { kitState, DEFAULT_KIT, type KitMeta } from '@/framework/kit-store'
+import { SHADCN_KIT } from '@/kits/shadcn'
+import { PLAIN_KIT } from '@/kits/plain'
+import { DECKURATE_KIT } from '@/kits/deckurate'
 
-// ---- UI 基础（shadcn-vue 风格自有副本） ----
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import Separator from '@/components/ui/separator/Separator.vue'
-import {
-  Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
-} from '@/components/ui/card'
-import {
-  Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption,
-} from '@/components/ui/table'
-import Skeleton from '@/components/ui/skeleton/Skeleton.vue'
-import Label from '@/components/ui/label/Label.vue'
-import Input from '@/components/ui/input/Input.vue'
-import Textarea from '@/components/ui/textarea/Textarea.vue'
-import Switch from '@/components/ui/switch/Switch.vue'
-import Checkbox from '@/components/ui/checkbox/Checkbox.vue'
-import Select from '@/components/ui/select/Select.vue'
-import RadioGroup from '@/components/ui/radio-group/RadioGroup.vue'
-import Slider from '@/components/ui/slider/Slider.vue'
-import DatePicker from '@/components/ui/date-picker/DatePicker.vue'
+/** 套件清单（顶栏下拉数据源；新增套件 = kits/ 下加映射 + 在此登记） */
+export const KIT_LIST: KitMeta[] = [
+  { id: 'shadcn', label: '精致 Shadcn', description: 'reka-ui + Tailwind 精致风（圆角、阴影、动效）' },
+  { id: 'plain', label: '极简 Plain', description: '原生元素极简风（直角、细边框、无阴影）' },
+  { id: 'deckurate', label: 'Deckurate 靛蓝', description: 'Deckurate 组件视觉（胶囊徽标、下划线标签、大写表头、语义色统计卡）' },
+]
 
-// ---- 框架自封装 ----
-import FrameWithTitleAndMenuFooter from '@/components/framework/FrameWithTitleAndMenuFooter.vue'
-import PageDefault from '@/components/framework/PageDefault.vue'
-import MenuTree from '@/components/framework/MenuTree.vue'
-import BreadcrumbAuto from '@/components/framework/BreadcrumbAuto.vue'
-import FieldPlaceholder from '@/components/framework/FieldPlaceholder.vue'
-import ReadonlyBoolean from '@/components/framework/ReadonlyBoolean.vue'
-import FallbackDisplay from '@/components/framework/FallbackDisplay.vue'
-import Text from '@/components/framework/Text.vue'
-import Heading from '@/components/framework/Heading.vue'
-import LinkText from '@/components/framework/LinkText.vue'
-import IconBox from '@/components/framework/IconBox.vue'
-import ImageBox from '@/components/framework/ImageBox.vue'
-import FieldValue from '@/components/framework/FieldValue.vue'
-import AlertView from '@/components/framework/AlertView.vue'
-import AvatarView from '@/components/framework/AvatarView.vue'
-import ProgressView from '@/components/framework/ProgressView.vue'
-import EmptyView from '@/components/framework/EmptyView.vue'
-import StatCard from '@/components/framework/StatCard.vue'
-import DescriptionsView from '@/components/framework/DescriptionsView.vue'
-import SchemaForm from '@/components/framework/SchemaForm.vue'
-import DataTable from '@/components/framework/DataTable.vue'
-import InputNumber from '@/components/framework/InputNumber.vue'
-import TabsView from '@/components/framework/TabsView.vue'
-import LayoutRow from '@/components/framework/LayoutRow.vue'
-import FormItemView from '@/components/framework/FormItemView.vue'
-import ChartXY from '@/components/framework/ChartXY.vue'
-import ChartBar from '@/components/framework/ChartBar.vue'
-import ChartDonut from '@/components/framework/ChartDonut.vue'
-
-export const registry: Record<string, Component> = {
-  // ===== 基础 =====
-  text: Text,
-  heading: Heading,
-  link: LinkText,
-  icon: IconBox,
-  image: ImageBox,
-  button: Button,
-  badge: Badge,
-  tag: Badge,
-  separator: Separator,
-  divider: Separator,
-  'field-value': FieldValue,
-
-  // ===== 卡片 / 容器 =====
-  card: Card,
-  'card-header': CardHeader,
-  'card-title': CardTitle,
-  'card-description': CardDescription,
-  'card-content': CardContent,
-  'card-footer': CardFooter,
-
-  // ===== 表单 =====
-  form: SchemaForm,
-  'schema-form': SchemaForm,
-  label: Label,
-  input: Input,
-  textarea: Textarea,
-  'input-number': InputNumber,
-  switch: Switch,
-  checkbox: Checkbox,
-  select: Select,
-  'radio-group': RadioGroup,
-  slider: Slider,
-  'date-picker': DatePicker,
-
-  // ===== 数据展示 =====
-  table: DataTable,
-  'table-raw': Table,
-  'table-header': TableHeader,
-  'table-body': TableBody,
-  'table-row': TableRow,
-  'table-head': TableHead,
-  'table-cell': TableCell,
-  'table-caption': TableCaption,
-  descriptions: DescriptionsView,
-  skeleton: Skeleton,
-  progress: ProgressView,
-  empty: EmptyView,
-  avatar: AvatarView,
-  'stat-card': StatCard,
-  'field-placeholder': FieldPlaceholder,
-  'readonly-boolean': ReadonlyBoolean,
-  'fallback-display': FallbackDisplay,
-
-  // ===== 图表（Unovis） =====
-  'chart-area': ChartXY,
-  'chart-line': ChartXY,
-  'chart-bar': ChartBar,
-  'chart-donut': ChartDonut,
-
-  // ===== 导航 =====
-  tabs: TabsView,
-  'tab-pane': { render: () => null },
-
-  // ===== 反馈 =====
-  alert: AlertView,
-
-  // ===== 布局 =====
-  row: LayoutRow,
-  'form-item': FormItemView,
-
-  // ===== 框架级 =====
-  'frame-with-title-and-menu-footer': FrameWithTitleAndMenuFooter,
-  'page-default': PageDefault,
-  'menu-tree': MenuTree,
-  'breadcrumb-auto': BreadcrumbAuto,
+/** 旧契约名 → 新契约名（重命名兼容层，双向文档见 doc/组件规范.md 附录） */
+export const COMPONENT_ALIASES: Record<string, string> = {
+  // 历史别名
+  tag: 'badge',
+  divider: 'separator',
+  form: 'schema-form',
+  // 2026-11 组件重命名
+  'frame-with-title-and-menu-footer': 'app-layout',
+  'page-default': 'page-view',
+  'menu-tree': 'nav-menu',
+  'breadcrumb-auto': 'breadcrumb',
+  'field-placeholder': 'field-list',
+  'readonly-boolean': 'boolean-badge',
+  'fallback-display': 'missing-component',
+  // 2026-11 场景布局定名（app-shell → app-layout）
+  'app-shell': 'app-layout',
 }
+
+const KITS: Record<string, Record<string, Component>> = {
+  shadcn: SHADCN_KIT,
+  plain: PLAIN_KIT,
+  deckurate: DECKURATE_KIT,
+}
+
+/**
+ * 按当前套件解析契约名：别名归一 → 当前套件 → 默认套件兜底。
+ * 读取 kitState.kit（响应式）：在渲染作用域内调用可在切套件时触发重渲染。
+ */
+export function resolveComponent(name: string): Component | undefined {
+  const canonical = COMPONENT_ALIASES[name] ?? name
+  const kit = KITS[kitState.kit] ?? KITS[DEFAULT_KIT]
+  return kit[canonical] ?? KITS[DEFAULT_KIT][canonical]
+}
+
+/**
+ * 兼容视图：renderer 等既有代码继续 `registry[name]` 取组件。
+ * Proxy 的 get 每次都走 resolveComponent，天然跟随套件切换。
+ */
+export const registry: Record<string, Component> = new Proxy(
+  {} as Record<string, Component>,
+  {
+    get: (_t, prop: string | symbol) =>
+      typeof prop === 'string' ? resolveComponent(prop) : undefined,
+    has: (_t, prop: string | symbol) =>
+      typeof prop === 'string' && resolveComponent(prop) != null,
+  },
+)

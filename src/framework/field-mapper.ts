@@ -8,7 +8,7 @@
  *   4. mode === 'disabled' → 编辑映射表 + disabled 注入
  *   5. mode === 'edit'     → 编辑映射表
  *   6. 数组字段在表格中 → table 内部处理多值列
- *   7. 未知类型 → fallback-display
+ *   7. 未知类型 → missing-component
  */
 
 import type { Mode } from './types'
@@ -23,7 +23,7 @@ const editMap: Record<string, string> = {
 const readonlyMap: Record<string, string> = {
   string: 'text',
   number: 'text',
-  boolean: 'readonly-boolean',
+  boolean: 'boolean-badge',
   Date: 'text',
 }
 
@@ -47,8 +47,8 @@ export function resolveFieldComponent(
   _context: { inTable?: boolean; inForm?: boolean } = {},
 ): string {
   if (mode === 'preview' && fieldType === 'string') return 'link'
-  if (mode === 'readonly') return readonlyMap[fieldType] ?? 'fallback-display'
-  return editMap[fieldType] ?? 'fallback-display'
+  if (mode === 'readonly') return readonlyMap[fieldType] ?? 'missing-component'
+  return editMap[fieldType] ?? 'missing-component'
 }
 
 /** 编辑态字段缺省值（SchemaForm 播种用） */

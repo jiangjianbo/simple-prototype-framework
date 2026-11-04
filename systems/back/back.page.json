@@ -2,12 +2,12 @@
   "desktop": {
     "type": "desktop",
     "id": "back-desktop",
-    "component": "frame-with-title-and-menu-footer",
+    "component": "app-layout",
     "children": [
       { "slot": "icon", "component": "icon", "data": "@/brain.svg", "size": "lg" },
       { "slot": "title", "component": "text", "data": "@title", "title": "数据安全大脑", "size": "base", "strong": true },
-      { "slot": "menu", "component": "menu-tree" },
-      { "slot": "breadcrumb", "component": "breadcrumb-auto" },
+      { "slot": "menu", "component": "nav-menu" },
+      { "slot": "breadcrumb", "component": "breadcrumb" },
       { "slot": "footer", "component": "text", "text": "安全运营中心 · 内部原型 v0.1", "muted": true },
 
       {
@@ -58,7 +58,7 @@
         "slot": "content",
         "title": "安全概览",
         "description": "数据安全态势总览 · 近 30 天（图表基于 Unovis，shadcn-vue charts 同源底层）",
-        "component": "page-default",
+        "component": "page-view",
         "children": [
           {
             "component": "row",
@@ -154,7 +154,7 @@
         "slot": "content",
         "title": "用户列表",
         "description": "列出全部的用户信息 · 列由 @@User 元数据自动生成 · 列表只读",
-        "component": "page-default",
+        "component": "page-view",
         "children": [
           {
             "component": "table",
@@ -164,7 +164,7 @@
             "sortable": true,
             "rows": "/systems/back/data/users.json",
             "column": [
-              { "component": "field-placeholder", "data": "@@User", "placeholder": "搜索姓名" },
+              { "component": "field-list", "data": "@@User", "placeholder": "搜索姓名" },
               { "type": "element", "component": "button", "text": "新增用户", "variant": "primary", "@goto": "user-info" }
             ]
           }
@@ -177,7 +177,7 @@
         "slot": "content",
         "title": "用户编辑",
         "description": "页面状态机演示：浏览 → 编辑 → 提交审核（user-info.sm.md）",
-        "component": "page-default",
+        "component": "page-view",
         "stateMachine": "/systems/back/pages/user-info.sm.md",
         "constants": { "$currentUserName": "张伟" },
         "children": [
@@ -293,7 +293,7 @@
         "slot": "content",
         "title": "订单聚合",
         "description": "TanStack Table 分组聚合按需启用：groupBy=品类 + sum(金额/数量)",
-        "component": "page-default",
+        "component": "page-view",
         "children": [
           {
             "component": "table",
@@ -322,7 +322,7 @@
         "slot": "content",
         "title": "用户详情",
         "description": "descriptions 只读展示 + disabled 表单（权限不足场景）",
-        "component": "page-default",
+        "component": "page-view",
         "children": [
           {
             "component": "row",
@@ -417,7 +417,7 @@
         "slot": "content",
         "title": "系统设置",
         "description": "edit 模式表单 · 决策矩阵：string→input / number→input-number / boolean→switch / Date→date-picker",
-        "component": "page-default",
+        "component": "page-view",
         "children": [
           {
             "component": "card",
@@ -457,6 +457,77 @@
                   "retentionDays": 180,
                   "maintenanceAt": "2026-11-08"
                 }
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "type": "page",
+        "id": "security-screen",
+        "slot": "content",
+        "title": "安全大屏",
+        "component": "screen-layout",
+        "children": [
+          { "slot": "icon", "component": "icon", "data": "@/brain.svg", "size": "lg" },
+          { "slot": "title", "component": "text", "text": "数据安全态势大屏", "size": "lg", "strong": true },
+          { "slot": "footer", "component": "text", "text": "安全运营中心 · 大屏场景（screen-layout，建议搭配深色主题）", "muted": true },
+          {
+            "component": "row",
+            "columns": 4,
+            "children": [
+              { "component": "stat-card", "title": "今日拦截攻击", "value": "1,847", "delta": "6%", "tone": "up", "icon": "shield-check", "hint": "较昨日上升 = 防御命中更多" },
+              { "component": "stat-card", "title": "在线探针", "value": "316/320", "delta": "98.8%", "tone": "up", "icon": "server", "hint": "离线 4 台待巡检" },
+              { "component": "stat-card", "title": "高危漏洞", "value": 7, "delta": "-3", "tone": "down", "icon": "shield-alert", "hint": "全部已进入处置流程" },
+              { "component": "stat-card", "title": "安全评分", "value": 86, "delta": "优秀", "tone": "default", "icon": "gauge", "hint": "0-100，越高越安全" }
+            ]
+          },
+          {
+            "component": "row",
+            "template": "2fr 1fr",
+            "children": [
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "攻击拦截趋势" },
+                      { "component": "card-description", "text": "近 30 天高风险/中风险事件（chart-area · 复用概览数据）" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "chart-area",
+                    "data": "/systems/back/data/risk-trend.json",
+                    "xKey": "date",
+                    "yKeys": ["high", "medium"],
+                    "height": 300
+                  }
+                ]
+              },
+              {
+                "component": "card",
+                "children": [
+                  {
+                    "slot": "header",
+                    "component": "card-header",
+                    "children": [
+                      { "component": "card-title", "text": "告警类型分布" },
+                      { "component": "card-description", "text": "本月累计（chart-donut）" }
+                    ]
+                  },
+                  {
+                    "slot": "default",
+                    "component": "chart-donut",
+                    "data": "/systems/back/data/alert-types.json",
+                    "categoryKey": "label",
+                    "valueKey": "value",
+                    "height": 240
+                  }
+                ]
               }
             ]
           }

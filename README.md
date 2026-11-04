@@ -11,7 +11,7 @@ JSON 驱动、可嵌套、类型感知的静态前端原型系统。用一份 JS
 ```bash
 npm install
 npm run dev        # 先生成 metadata.json，再启动 vite（默认 http://localhost:5173）
-npm run build      # 生产构建（dist/）
+npm run build      # 生产构建：dist/ 服务器模式 + 每系统一个自包含静态页（见「静态构建」）
 npm run typecheck  # vue-tsc 全量类型检查
 npx vitest run     # 进程内回归测试（jsdom 挂载真实 App，fetch 读取 systems/ 真实配置）
 ```
@@ -25,7 +25,7 @@ systems/                  ← 全部人写内容（改原型只来这里）
   index.json              #   系统清单（多系统切换器数据源）
   back/                   #   示例系统一：数据安全大脑（后台）
     models/*.ts           #     类型模型（User/Order/Role/Setting/Auditor）
-    back.menu.json        #     菜单配置
+    back.menu.json        #     菜单配置（含角色定义与菜单角色权限）
     back.page.json        #     页面配置（desktop 节点）
     pages/*.sm.md         #     页面状态机（=== 分区 DSL）
     data/*.json           #     mock 数据
@@ -33,6 +33,7 @@ systems/                  ← 全部人写内容（改原型只来这里）
   userfront/              #   示例系统二：用户中心（前台）
 public/                   ← 纯生成产物（metadata.json），整目录可随时删除重建
 src/                      ← 框架引擎（一次性写好，写原型时不用动）
+scripts/build-static.ts   ← 静态页构建脚本（build 的最后一步）
 tests/                    ← 回归测试（jsdom 挂载真实 App）
 doc/                      ← 设计文档 + 原型编写操作手册
 ```
@@ -50,7 +51,9 @@ src/
     breadcrumb-store.ts            # 面包屑（自动派生 + 截断语义）
     page-engine.ts                 # 页面状态机装配（scope 播种、引擎缓存）
     state-machine/{parser,engine}.ts  # 状态机 DSL 解析与运行时
-    resolver.ts                    # /file.json 内联、@@Type、@attr 引用
+    resolver.ts                    # /file.json 内联、@@Type、@attr 引用（优先命中静态 bootstrap）
+    role.ts                        # 角色定义与菜单过滤（默认角色、白名单、权限丢失回退）
+    static-bootstrap.ts            # 静态构建模式：读取页面内嵌数据块，替代网络请求
     metadata.ts                    # 类型元数据查询与字段下钻
     field-mapper.ts                # 类型 × mode 决策矩阵（string→input 等）
   components/
@@ -86,9 +89,25 @@ src/
 
 `=== STATE ===` 分区 DSL（`.sm.md`）：列头 = 目标状态，事件单元 = `条件 ? 目标 : 兜底`，响应区 = 对组件绑定（`readOnly/enabled/visible/text/value`）的赋值语句。示例见 `systems/back/pages/user-info.sm.md`（浏览 → 编辑 → 提交审核）。
 
+## 角色与菜单权限
+
+`menu.json` 顶层 `roles: [{ id, label, description? }]` 声明角色体系（可省略 = 不启用），第一个角色为默认；菜单项 `roles: ["admin", ...]` 白名单控制可见性（缺省全可见）。顶栏下拉即时切换角色并过滤菜单树：纯分组子项全被过滤则整组隐藏；当前页失去权限时自动跳到该角色第一个可见页面。过滤仅在菜单层，属原型演示语义。
+
 ## 多系统
 
 `systems/index.json` 声明系统清单；顶栏切换器调用 `loadSystem(id)` 完整重载（销毁状态机引擎 → 拉取 menu/page 配置 → 预处理内联 → 重建树索引 → 定位首页）。页面配置支持两种形态：`{ "desktop": {...} }` 包装式（back）或根节点即 desktop 节点（userfront）。
+
+## 套件与主题（组件实现 × 配色，自由组合）
+
+- **套件（Kit）**：组件契约的一套实现，可按系统声明（`index.json` 条目 `kit` 字段）。注册表是「契约名 → 当前套件实现」的解析视图，套件可**部分覆盖**——未覆盖的契约名回落默认套件，继承的复合件（表单/表格/标签页）经契约解析自动随套件变形。内置：`shadcn`（精致风，全量+兜底）、`plain`（原生极简风，直角细边框）、`deckurate`（复刻 [Deckurate-Front](https://github.com/jiangjianbo/Deckurate-Front) 基础组件视觉：灰底描边按钮、胶囊徽标、下划线标签页、大写表头、语义色统计卡）。顶栏「套件」下拉运行时切换（整树按新实现重挂载）。
+- **主题（Theme）**：CSS 变量配色，与套件正交。内置 `light` 浅色 / `dark` 深色（`html.dark` class）/ `warm` 暖沙（`data-theme` 属性）/ `deckurate` 靛蓝，顶栏切换即时生效；按系统声明（`theme` 字段）。
+- **扩展契约**：自 Deckurate 基础组件引入 7 个套件无关新契约（`toolbar` / `kbd` / `tag-list` / `toggle-group` / `tree` / `progress-ring` / `service-status`），注册于 shadcn 套件，全套餐件共享。
+- **场景布局（Scene Layout）**：每个界面的最底层布局，一个系统可多场景并存——`app-layout` 主应用（desktop 标准）、`login-layout` 登录/注册页、`screen-layout` 数据大屏（示例见 back 系统「安全大屏」页）。所有场景布局统一提供 `controls` 槽承载原型切换器（系统/套件/主题/角色），留空自动回落契约组件 `layout-controls`。
+- 契约名已于 2026-11 全量改为约定俗成的语义名（`app-layout` / `page-view` / `nav-menu` / `breadcrumb` / `field-list` / `boolean-badge` / `missing-component` 等），旧名（含 `app-shell`）经别名层永久兼容。每个组件的名称/参数/插槽规范见 **doc/组件规范.md**。
+
+## 静态构建（dist/<系统id>/index.html，file:// 直开）
+
+`npm run build` 最后一步 `scripts/build-static.ts` 为每个系统生成**自包含单文件静态页**：菜单/页面 JSON、状态机源文、图片资源（data URL）全部内嵌进 `<script type="application/json" id="pp-bootstrap">` 数据块，JS/CSS 内联为模块脚本与样式表——因为浏览器在 file:// 协议下拦截外部模块脚本与 fetch，运行时 `fetchJson/fetchText/resolveAssetUrl` 优先命中 bootstrap 数据块，实现零网络加载。顶栏系统切换在静态页间以相对路径跳转（`../<目标id>/index.html`）；角色切换与菜单过滤在静态页中同样生效。`dist/index.html` 保留为服务器模式入口。
 
 ## 测试
 
@@ -99,11 +118,17 @@ vitest + jsdom 进程内挂载真实 `App.vue`，`fetch` stub 直接读取 `syst
 3. 状态机全流程（浏览禁用 → 编辑放开 → 提交审核回禁用）；
 4. Unovis 图表 SVG path 绘制、分组表格 Σ 聚合 / 搜索过滤 / 收起展开 / 分页；
 5. 用户详情（descriptions + disabled 表单 + `@goto` 返回）、系统设置（fieldOptions 下拉 + switch）；
-6. back ↔ userfront 多系统切换，页面与菜单随系统重建。
+6. back ↔ userfront 多系统切换，页面与菜单随系统重建；
+7. 角色体系（roles.test.ts）：默认角色、菜单白名单过滤、纯分组隐藏、权限丢失回退、跨系统角色重置；
+8. 静态构建模式（static-mode.test.ts）：bootstrap 数据块注入后零网络加载完整页面（含状态机与资源 data URL），系统切换转发到 `../<id>/index.html`；
+9. 套件与主题（kits.test.ts）：旧名别名解析、按系统声明应用（userfront=plain/warm）、运行时切套件整树重挂载、三主题生效方式（dark class / data-theme）；
+10. 场景布局（layouts.test.ts）：app-layout / login-layout / screen-layout 的 `controls` 槽留空回落 `layout-controls`、写 children 整簇替换、各场景结构（登录面板 / 大屏标题栏 / footer）；
+11. deckurate 套件与系统（deckurate.test.ts）：套件覆盖解析（button 换实现）、共享扩展契约经兜底可解析、按系统声明启动（kit=deckurate/theme=deckurate）、仪表盘与文库页结构（树 / 工具栏 / kbd / tag-list / toggle-group / service-status / progress-ring / 大写表头）。
 
 ## 设计约束与已知边界
 
 - 原型阶段状态机条件/响应使用 `with(scope) + new Function` 求值，生产环境应替换为 AST 求值器。
 - 全局 `app.config.errorHandler` 兜底：生命周期/调度回调异常只记录不上抛，防止击穿 Vue 调度器导致整站静默冻结。
 - 图表为 Unovis 基础封装（area/line/bar/donut）；未来需要高级图表时再评估 TanStack Charts。
-- 构建产物单 chunk 约 625 kB（未做代码分割），原型阶段可接受。
+- 构建产物单 chunk 约 625 kB（未做代码分割）；每个静态页为单文件全内联（约 0.7 MB），原型阶段可接受。
+- 角色过滤仅在菜单层（不拦截 `@goto`/URL 直达），静态页为构建期快照，改 systems/ 后需重新 `npm run build`。

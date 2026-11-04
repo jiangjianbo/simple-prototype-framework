@@ -14,18 +14,21 @@ import type { FieldMeta, Mode } from '@/framework/types'
 import { isRefType } from '@/framework/metadata'
 import { defaultValueFor, resolveFieldComponent, FORM_LIKE_COMPONENTS } from '@/framework/field-mapper'
 import FieldValue from './FieldValue.vue'
-import FallbackDisplay from './FallbackDisplay.vue'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Select } from '@/components/ui/select'
-import { RadioGroup } from '@/components/ui/radio-group'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Slider } from '@/components/ui/slider'
-import { DatePicker } from '@/components/ui/date-picker'
-import InputNumber from './InputNumber.vue'
+import FallbackDisplay from './MissingComponent.vue'
+import { resolveComponent } from '@/registry'
 import { cn } from '@/lib/utils'
+
+// 表单控件经契约解析（随套件变形）；在 setup 体内解析，整树随套件切换重挂载后自动取新实现
+const Input = resolveComponent('input')!
+const Textarea = resolveComponent('textarea')!
+const InputNumber = resolveComponent('input-number')!
+const Label = resolveComponent('label')!
+const Switch = resolveComponent('switch')!
+const Select = resolveComponent('select')!
+const RadioGroup = resolveComponent('radio-group')!
+const Checkbox = resolveComponent('checkbox')!
+const Slider = resolveComponent('slider')!
+const DatePicker = resolveComponent('date-picker')!
 
 interface FieldOption {
   label: string
@@ -88,7 +91,7 @@ const plans = computed<Plan[]>(() =>
     return {
       field: f,
       comp,
-      display: comp === 'text' || comp === 'readonly-boolean' || comp === 'link',
+      display: comp === 'text' || comp === 'boolean-badge' || comp === 'link',
       options: props.fieldOptions?.[f.name],
     }
   }),

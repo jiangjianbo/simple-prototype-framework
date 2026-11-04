@@ -47,6 +47,8 @@ function prototypeContent(root: string): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
+  // 相对 base：dist/index.html 与各 dist/<系统>/index.html 均可直接 file:// 打开
+  base: './',
   plugins: [vue(), tailwindcss(), prototypeContent(process.cwd())],
   resolve: {
     alias: {

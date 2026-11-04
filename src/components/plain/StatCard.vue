@@ -1,0 +1,44 @@
+<script setup lang="ts">
+/** plain 套件 stat-card：直角统计卡片，视觉与 shadcn 版同契约（title/value/delta/icon/hint/tone） */
+
+import { computed } from 'vue'
+import type { Component } from 'vue'
+import { resolveIcon } from '@/lib/icon-map'
+import Badge from './Badge.vue'
+
+const props = withDefaults(
+  defineProps<{
+    title?: string
+    value?: string | number
+    delta?: string
+    icon?: string
+    hint?: string
+    tone?: 'default' | 'up' | 'down'
+  }>(),
+  { tone: 'default' },
+)
+
+const iconCmp = computed(() => resolveIcon(props.icon) as Component)
+
+const deltaCls = computed(() => (
+  { up: 'success', down: 'destructive', default: 'secondary' } as const
+)[props.tone])
+</script>
+
+<template>
+  <div data-slot="stat-card" class="bg-card text-card-foreground flex flex-col gap-1 border p-4">
+    <div class="flex items-center justify-between">
+      <span class="text-muted-foreground text-sm">{{ title }}</span>
+      <span class="bg-primary/10 text-primary inline-flex size-8 items-center justify-center">
+        <component :is="iconCmp" class="size-4" />
+      </span>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold tracking-tight tabular-nums">{{ value }}</span>
+      <Badge v-if="delta" :variant="deltaCls" class="gap-0.5">
+        {{ tone === 'down' ? '↓' : tone === 'up' ? '↑' : '' }}{{ delta }}
+      </Badge>
+    </div>
+    <span v-if="hint" class="text-muted-foreground text-xs">{{ hint }}</span>
+  </div>
+</template>

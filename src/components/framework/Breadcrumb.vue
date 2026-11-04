@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * breadcrumb-auto（§9.2）：只消费 breadcrumbState.trail，
+ * breadcrumb（§9.2）：只消费 breadcrumbState.trail，
  * 点击非末项时 navigate 回跳（触发截断语义）。
  */
 

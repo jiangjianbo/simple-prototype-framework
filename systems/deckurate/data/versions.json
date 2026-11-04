@@ -1,0 +1,10 @@
+[
+  { "id": "ver-101", "documentId": "doc-001", "versionNumber": 3, "filename": "q4-launch-v3.pptx", "fileSize": 8421376, "status": "completed", "totalSegments": 24, "createdAt": "2026-11-01" },
+  { "id": "ver-102", "documentId": "doc-001", "versionNumber": 2, "filename": "q4-launch-v2.pptx", "fileSize": 8178896, "status": "completed", "totalSegments": 22, "createdAt": "2026-10-12" },
+  { "id": "ver-103", "documentId": "doc-001", "versionNumber": 1, "filename": "q4-launch-v1.pptx", "fileSize": 7969178, "status": "completed", "totalSegments": 20, "createdAt": "2026-09-12" },
+  { "id": "ver-104", "documentId": "doc-002", "versionNumber": 2, "filename": "security-wp-2026-v2.docx", "fileSize": 3145728, "status": "completed", "totalSegments": 41, "createdAt": "2026-10-28" },
+  { "id": "ver-105", "documentId": "doc-002", "versionNumber": 1, "filename": "security-wp-2026-v1.docx", "fileSize": 2831156, "status": "completed", "totalSegments": 36, "createdAt": "2026-08-30" },
+  { "id": "ver-106", "documentId": "doc-004", "versionNumber": 4, "filename": "onboarding-v4.pptx", "fileSize": 5242880, "status": "completed", "totalSegments": 18, "createdAt": "2026-10-15" },
+  { "id": "ver-107", "documentId": "doc-004", "versionNumber": 3, "filename": "onboarding-v3.pptx", "fileSize": 4980736, "status": "completed", "totalSegments": 17, "createdAt": "2026-09-03" },
+  { "id": "ver-108", "documentId": "doc-008", "versionNumber": 3, "filename": "channel-pitch-v3", "fileSize": 0, "status": "completed", "totalSegments": 12, "createdAt": "2026-11-02" }
+]

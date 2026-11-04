@@ -1,0 +1,14 @@
+[
+  { "id": "tag-01", "name": "新品发布", "category": "市场", "usageCount": 23, "createdAt": "2026-06-01" },
+  { "id": "tag-02", "name": "产品介绍", "category": "市场", "usageCount": 31, "createdAt": "2026-06-01" },
+  { "id": "tag-03", "name": "白皮书", "category": "技术", "usageCount": 8, "createdAt": "2026-06-15" },
+  { "id": "tag-04", "name": "安全", "category": "技术", "usageCount": 12, "createdAt": "2026-06-15" },
+  { "id": "tag-05", "name": "商务", "category": "销售", "usageCount": 19, "createdAt": "2026-07-02" },
+  { "id": "tag-06", "name": "案例", "category": "销售", "usageCount": 15, "createdAt": "2026-07-02" },
+  { "id": "tag-07", "name": "内部培训", "category": "人力资源", "usageCount": 6, "createdAt": "2026-08-10" },
+  { "id": "tag-08", "name": "品牌", "category": "设计", "usageCount": 9, "createdAt": "2026-08-22" },
+  { "id": "tag-09", "name": "路演", "category": "销售", "usageCount": 11, "createdAt": "2026-09-01" },
+  { "id": "tag-10", "name": "技术", "category": "技术", "usageCount": 27, "createdAt": "2026-06-15" },
+  { "id": "tag-11", "name": "规划", "category": "产品", "usageCount": 5, "createdAt": "2026-10-01" },
+  { "id": "tag-12", "name": "市场", "category": "市场", "usageCount": 14, "createdAt": "2026-06-01" }
+]

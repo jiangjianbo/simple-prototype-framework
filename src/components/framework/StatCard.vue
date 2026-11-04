@@ -25,7 +25,7 @@ const deltaCls = computed(() => (
 </script>
 
 <template>
-  <div class="bg-card text-card-foreground flex flex-col gap-1 rounded-xl border p-5 shadow-sm">
+  <div data-slot="stat-card" class="bg-card text-card-foreground flex flex-col gap-1 rounded-xl border p-5 shadow-sm">
     <div class="flex items-center justify-between">
       <span class="text-muted-foreground text-sm">{{ title }}</span>
       <span class="bg-primary/10 text-primary inline-flex items-center justify-center size-8 rounded-lg">

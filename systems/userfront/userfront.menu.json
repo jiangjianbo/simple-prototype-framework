@@ -1,8 +1,12 @@
 {
   "title": "用户中心",
+  "roles": [
+    { "id": "member", "label": "注册会员" },
+    { "id": "guest", "label": "访客" }
+  ],
   "items": [
     { "label": "工作台", "pageId": "home", "icon": "layout-dashboard" },
-    { "label": "个人资料", "pageId": "profile", "icon": "user-pen" },
+    { "label": "个人资料", "pageId": "profile", "icon": "user-pen", "roles": ["member"] },
     { "label": "我的订单", "pageId": "orders", "icon": "shopping-cart" }
   ]
 }

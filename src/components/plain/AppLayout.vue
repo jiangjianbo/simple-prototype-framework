@@ -1,20 +1,20 @@
 <script setup lang="ts">
 /**
- * frame-with-title-and-menu-footer（§7.2）：整体桌面框架。
- * 插槽：title / icon / menu / breadcrumb / content / sidebar / footer
- * 额外内置：系统切换器（§9.4 多系统）。
+ * plain 套件 app-layout（场景布局，契约同 shadcn 版 app-layout）：
+ * 插槽：icon / title / menu / breadcrumb / controls / content / sidebar / footer
+ * controls 槽留空回落契约 layout-controls（经契约解析，套件无关）。
+ * 视觉：直角细分隔线、无侧栏底色差异。
  */
 
-import { appState, loadSystem } from '@/framework/app-store'
-import Select from '@/components/ui/select/Select.vue'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
+import { resolveComponent } from '@/registry'
+
+const ControlsCmp = resolveComponent('layout-controls')!
 </script>
 
 <template>
   <div class="flex h-screen overflow-hidden bg-background">
     <!-- 左侧：icon + title + menu + footer -->
-    <aside class="hidden w-60 shrink-0 flex-col border-r bg-sidebar md:flex">
+    <aside class="hidden w-60 shrink-0 flex-col border-r md:flex">
       <div class="flex h-14 shrink-0 items-center gap-2.5 border-b px-4">
         <slot name="icon" />
         <slot name="title" />
@@ -28,20 +28,14 @@ import { Separator } from '@/components/ui/separator'
       </div>
     </aside>
 
-    <!-- 右侧：breadcrumb + content + sidebar -->
+    <!-- 右侧：breadcrumb + controls + content + sidebar -->
     <div class="flex min-w-0 flex-1 flex-col">
-      <header class="flex h-14 shrink-0 items-center gap-4 border-b bg-background/70 px-5 backdrop-blur">
+      <header class="flex h-14 shrink-0 items-center gap-4 border-b px-5">
         <slot name="breadcrumb" />
-        <div class="ml-auto flex items-center gap-3">
-          <Select
-            class="w-36"
-            :model-value="appState.system"
-            :options="appState.systems.map(s => ({ label: s.label, value: s.id }))"
-            @update:model-value="loadSystem(String($event))"
-          />
-          <Avatar class="size-8">
-            <AvatarFallback text="管" class="bg-primary/10 text-primary" />
-          </Avatar>
+        <div class="ml-auto flex items-center">
+          <slot name="controls">
+            <component :is="ControlsCmp" />
+          </slot>
         </div>
       </header>
 

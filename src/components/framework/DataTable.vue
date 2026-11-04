@@ -30,13 +30,21 @@ import {
 import type { ColumnDef, ExpandedState, SortingState } from '@tanstack/table-core'
 import type { FieldMeta } from '@/framework/types'
 import { formatDate, formatNumber, cn } from '@/lib/utils'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { resolveComponent } from '@/registry'
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Search } from 'lucide-vue-next'
 import FieldValue from './FieldValue.vue'
 import EmptyView from './EmptyView.vue'
+
+// 表格原语与工具条控件经契约解析（随套件变形）
+const Table = resolveComponent('table-raw')!
+const TableHeader = resolveComponent('table-header')!
+const TableBody = resolveComponent('table-body')!
+const TableRow = resolveComponent('table-row')!
+const TableHead = resolveComponent('table-head')!
+const TableCell = resolveComponent('table-cell')!
+const Badge = resolveComponent('badge')!
+const Button = resolveComponent('button')!
+const Input = resolveComponent('input')!
 
 export interface ColumnConfig {
   field: string

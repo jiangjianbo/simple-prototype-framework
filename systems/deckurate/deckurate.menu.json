@@ -1,0 +1,10 @@
+{
+  "title": "Deck. 素材库",
+  "items": [
+    { "label": "仪表盘", "pageId": "dashboard", "icon": "layout-dashboard" },
+    { "label": "文库", "pageId": "library", "icon": "layers" },
+    { "label": "标签管理", "pageId": "tags", "icon": "tags" },
+    { "label": "版本历史", "pageId": "versions", "icon": "history" },
+    { "label": "回收站", "pageId": "trash", "icon": "trash-2" }
+  ]
+}

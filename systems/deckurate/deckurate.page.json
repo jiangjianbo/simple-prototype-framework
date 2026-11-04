@@ -1,0 +1,285 @@
+{
+  "type": "desktop",
+  "id": "deckurate-desktop",
+  "component": "app-layout",
+  "children": [
+    { "slot": "icon", "component": "icon", "data": "@/deck.svg", "size": "lg" },
+    { "slot": "title", "component": "text", "data": "@title", "title": "Deck. 素材库", "size": "base", "strong": true },
+    { "slot": "menu", "component": "nav-menu" },
+    { "slot": "menu", "component": "tree", "data": "/systems/deckurate/data/folders.json" },
+    { "slot": "breadcrumb", "component": "breadcrumb" },
+    { "slot": "footer", "component": "text", "text": "Deck. · 演示素材库原型", "muted": true },
+
+    {
+      "type": "page",
+      "id": "dashboard",
+      "slot": "content",
+      "title": "仪表盘",
+      "description": "素材库总览 · 文档 / 片段 / 标签 / 选辑（deckurate 套件 + 靛蓝主题）",
+      "component": "page-view",
+      "children": [
+        {
+          "component": "row",
+          "columns": 4,
+          "children": [
+            { "component": "stat-card", "title": "文档总数", "value": 128, "delta": "8%", "tone": "up", "icon": "file-text", "hint": "本月新增 10 份", "color": "primary" },
+            { "component": "stat-card", "title": "片段总数", "value": 1042, "delta": "5%", "tone": "up", "icon": "layers", "hint": "含全部已切分文档" },
+            { "component": "stat-card", "title": "选辑", "value": 12, "delta": "2", "tone": "up", "icon": "package", "hint": "最近更新：渠道招商路演", "color": "success" },
+            { "component": "stat-card", "title": "切分失败", "value": 1, "delta": "-2", "tone": "down", "icon": "triangle-alert", "hint": "market-insight.pdf 解析超时", "color": "danger" }
+          ]
+        },
+        {
+          "component": "row",
+          "template": "1fr 1.4fr",
+          "children": [
+            {
+              "component": "card",
+              "children": [
+                {
+                  "slot": "header",
+                  "component": "card-header",
+                  "children": [
+                    { "component": "card-title", "text": "文档状态" },
+                    { "component": "card-description", "text": "按文件类型分布（chart-donut）" }
+                  ]
+                },
+                {
+                  "slot": "default",
+                  "component": "chart-donut",
+                  "data": "/systems/deckurate/data/doc-status.json",
+                  "categoryKey": "label",
+                  "valueKey": "value",
+                  "height": 220
+                }
+              ]
+            },
+            {
+              "component": "card",
+              "children": [
+                {
+                  "slot": "header",
+                  "component": "card-header",
+                  "children": [
+                    { "component": "card-title", "text": "片段类型" },
+                    { "component": "card-description", "text": "slide_page / word_section / pdf_section（chart-bar）" }
+                  ]
+                },
+                {
+                  "slot": "default",
+                  "component": "chart-bar",
+                  "data": "/systems/deckurate/data/segment-types.json",
+                  "xKey": "label",
+                  "yKeys": ["value"],
+                  "height": 220
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "component": "row",
+          "columns": 2,
+          "children": [
+            {
+              "component": "card",
+              "children": [
+                {
+                  "slot": "header",
+                  "component": "card-header",
+                  "children": [
+                    { "component": "card-title", "text": "最近文档" },
+                    { "component": "card-description", "text": "table · documents.json 实例数据" }
+                  ]
+                },
+                {
+                  "slot": "default",
+                  "component": "table",
+                  "rows": "/systems/deckurate/data/documents.json",
+                  "paginated": false,
+                  "column": [
+                    { "field": "title", "label": "标题" },
+                    { "field": "docType", "label": "类型" },
+                    { "field": "totalSegments", "label": "片段" },
+                    { "field": "updatedAt", "label": "更新时间" }
+                  ]
+                }
+              ]
+            },
+            {
+              "component": "card",
+              "children": [
+                {
+                  "slot": "header",
+                  "component": "card-header",
+                  "children": [
+                    { "component": "card-title", "text": "服务状态" },
+                    { "component": "card-description", "text": "service-status · ok / degraded / down" }
+                  ]
+                },
+                {
+                  "slot": "default",
+                  "component": "row",
+                  "template": "1fr",
+                  "gap": 14,
+                  "children": [
+                    { "component": "service-status", "status": "ok", "label": "索引服务" },
+                    { "component": "service-status", "status": "degraded", "label": "OCR 切分" },
+                    { "component": "service-status", "status": "down", "label": "导出服务" },
+                    { "component": "progress-ring", "value": 82, "size": 96, "strokeWidth": 8 }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "library",
+      "slot": "content",
+      "title": "文库",
+      "description": "全部素材 · 工具栏 + 标签过滤 + 文档列表（table · @@Document）",
+      "component": "page-view",
+      "children": [
+        {
+          "component": "toolbar",
+          "children": [
+            { "component": "button", "text": "新建", "variant": "primary" },
+            { "component": "button", "text": "上传", "variant": "outline" },
+            { "component": "input", "placeholder": "搜索素材…", "class": "w-52" },
+            { "component": "kbd", "text": "⌘K" },
+            { "component": "separator", "class": "mx-1 h-5" },
+            { "component": "tag-list", "tags": ["新品发布", "产品介绍", "商务", "白皮书", "案例", "路演", "品牌"], "limit": 4, "clickable": true },
+            { "component": "toggle-group", "modelValue": "list", "options": [
+              { "label": "列表", "value": "list" },
+              { "label": "画廊", "value": "gallery" }
+            ]}
+          ]
+        },
+        {
+          "component": "table",
+          "title": "全部素材",
+          "rows": "/systems/deckurate/data/documents.json",
+          "searchable": true,
+          "sortable": true,
+          "column": [
+            { "field": "title", "label": "标题" },
+            { "field": "docType", "label": "类型" },
+            { "field": "filename", "label": "文件名" },
+            { "field": "status", "label": "状态" },
+            { "field": "totalSegments", "label": "片段数" },
+            { "field": "tags", "label": "标签" },
+            { "field": "currentVersion", "label": "版本" },
+            { "field": "updatedAt", "label": "更新时间" },
+            { "type": "element", "component": "button", "text": "查看", "variant": "ghost" },
+            { "type": "element", "component": "button", "text": "删除", "variant": "ghost" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "tags",
+      "slot": "content",
+      "title": "标签管理",
+      "description": "全局标签 · 预览（tag-list）与明细（table · tags.json 实例数据）",
+      "component": "page-view",
+      "children": [
+        {
+          "component": "card",
+          "children": [
+            {
+              "slot": "header",
+              "component": "card-header",
+              "children": [
+                { "component": "card-title", "text": "标签总览" },
+                { "component": "card-description", "text": "tag-list · 点击可筛选，超出的折叠为 +N" }
+              ]
+            },
+            {
+              "slot": "default",
+              "component": "tag-list",
+              "tags": ["新品发布", "产品介绍", "白皮书", "安全", "商务", "案例", "内部培训", "品牌", "路演", "技术", "规划", "市场"],
+              "limit": 8,
+              "clickable": true
+            }
+          ]
+        },
+        {
+          "component": "table",
+          "title": "标签明细",
+          "rows": "/systems/deckurate/data/tags.json",
+          "searchable": true,
+          "sortable": true,
+          "column": [
+            { "field": "name", "label": "名称" },
+            { "field": "category", "label": "分类" },
+            { "field": "usageCount", "label": "使用次数" },
+            { "field": "createdAt", "label": "创建时间" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "versions",
+      "slot": "content",
+      "title": "版本历史",
+      "description": "全部文档版本（table · versions.json 实例数据）",
+      "component": "page-view",
+      "children": [
+        {
+          "component": "table",
+          "title": "版本列表",
+          "rows": "/systems/deckurate/data/versions.json",
+          "searchable": true,
+          "sortable": true,
+          "column": [
+            { "field": "documentId", "label": "文档" },
+            { "field": "versionNumber", "label": "版本号" },
+            { "field": "filename", "label": "文件名" },
+            { "field": "status", "label": "状态" },
+            { "field": "totalSegments", "label": "片段数" },
+            { "field": "createdAt", "label": "创建时间" },
+            { "type": "element", "component": "button", "text": "查看", "variant": "ghost" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "trash",
+      "slot": "content",
+      "title": "回收站",
+      "description": "已删除条目（table · trash.json 实例数据）",
+      "component": "page-view",
+      "children": [
+        {
+          "component": "toolbar",
+          "children": [
+            { "component": "button", "text": "恢复选中", "variant": "outline" },
+            { "component": "button", "text": "永久删除", "variant": "destructive" },
+            { "component": "button", "text": "清空回收站", "variant": "ghost" }
+          ]
+        },
+        {
+          "component": "table",
+          "title": "已删除条目",
+          "rows": "/systems/deckurate/data/trash.json",
+          "searchable": true,
+          "column": [
+            { "field": "entityType", "label": "条目类型" },
+            { "field": "filename", "label": "名称" },
+            { "field": "fileSize", "label": "大小" },
+            { "field": "deletedAt", "label": "删除时间" }
+          ]
+        }
+      ]
+    }
+  ]
+}

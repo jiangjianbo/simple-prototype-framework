@@ -1,0 +1,12 @@
+[
+  { "id": "doc-001", "title": "Q4 产品发布会", "docType": "slider", "filename": "q4-launch.pptx", "fileSize": 8421376, "status": "completed", "totalSegments": 24, "tags": "新品发布, 产品介绍", "currentVersion": "v3", "createdAt": "2026-09-12", "updatedAt": "2026-11-01" },
+  { "id": "doc-002", "title": "年度安全白皮书", "docType": "word", "filename": "security-wp-2026.docx", "fileSize": 3145728, "status": "completed", "totalSegments": 41, "tags": "白皮书, 安全", "currentVersion": "v2", "createdAt": "2026-08-30", "updatedAt": "2026-10-28" },
+  { "id": "doc-003", "title": "合作伙伴计划书", "docType": "pdf", "filename": "partner-plan.pdf", "fileSize": 1572864, "status": "processing", "totalSegments": 0, "tags": "商务", "currentVersion": "v1", "createdAt": "2026-10-20", "updatedAt": "2026-10-20" },
+  { "id": "doc-004", "title": "新员工入职指引", "docType": "slider", "filename": "onboarding.pptx", "fileSize": 5242880, "status": "completed", "totalSegments": 18, "tags": "内部培训, HR", "currentVersion": "v4", "createdAt": "2026-07-15", "updatedAt": "2026-10-15" },
+  { "id": "doc-005", "title": "客户成功案例集", "docType": "composite", "filename": "customer-stories", "fileSize": 0, "status": "completed", "totalSegments": 9, "tags": "案例, 销售", "currentVersion": "v2", "createdAt": "2026-10-02", "updatedAt": "2026-10-30" },
+  { "id": "doc-006", "title": "2026 市场洞察报告", "docType": "pdf", "filename": "market-insight.pdf", "fileSize": 9437184, "status": "failed", "totalSegments": 0, "tags": "市场", "currentVersion": "v1", "createdAt": "2026-10-25", "updatedAt": "2026-10-26" },
+  { "id": "doc-007", "title": "品牌视觉规范", "docType": "word", "filename": "brand-guidelines.docx", "fileSize": 2097152, "status": "completed", "totalSegments": 32, "tags": "品牌, 设计", "currentVersion": "v1", "createdAt": "2026-06-18", "updatedAt": "2026-09-22" },
+  { "id": "doc-008", "title": "渠道招商路演", "docType": "composite", "filename": "channel-pitch", "fileSize": 0, "status": "completed", "totalSegments": 12, "tags": "商务, 路演", "currentVersion": "v3", "createdAt": "2026-09-28", "updatedAt": "2026-11-02" },
+  { "id": "doc-009", "title": "产品路线图 2027", "docType": "slider", "filename": "roadmap-2027.pptx", "fileSize": 4194304, "status": "completed", "totalSegments": 16, "tags": "产品, 规划", "currentVersion": "v1", "createdAt": "2026-10-12", "updatedAt": "2026-10-12" },
+  { "id": "doc-010", "title": "技术架构评审纪要", "docType": "word", "filename": "arch-review.docx", "fileSize": 1048576, "status": "completed", "totalSegments": 21, "tags": "技术, 评审", "currentVersion": "v2", "createdAt": "2026-09-05", "updatedAt": "2026-09-18" }
+]

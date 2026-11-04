@@ -1,0 +1,7 @@
+[
+  { "id": "trash-01", "entityType": "document", "filename": "旧版招商方案.pptx", "fileSize": 6291456, "deletedAt": "2026-10-30" },
+  { "id": "trash-02", "entityType": "composite", "filename": "内部年会串场", "fileSize": 0, "deletedAt": "2026-10-27" },
+  { "id": "trash-03", "entityType": "document", "filename": "draft-notes.docx", "fileSize": 524288, "deletedAt": "2026-10-21" },
+  { "id": "trash-04", "entityType": "segment", "filename": "定价策略（片段）", "fileSize": 0, "deletedAt": "2026-10-18" },
+  { "id": "trash-05", "entityType": "document", "filename": "竞品对比-过期版.pdf", "fileSize": 3145728, "deletedAt": "2026-09-25" }
+]

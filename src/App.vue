@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
 import { appState, boot, rootCtx } from '@/framework/app-store'
+import { kitState } from '@/framework/kit-store'
 import { NodeRenderer } from '@/framework/renderer'
 
 onMounted(boot)
+
+// 套件更换 = 组件实现全换：以 系统:套件 为 key 整树重挂载（引擎随 loadSystem 重建）
+const remountKey = computed(() => `${appState.system}:${kitState.kit}`)
 </script>
 
 <template>
@@ -23,5 +27,5 @@ onMounted(boot)
     </div>
   </div>
 
-  <NodeRenderer v-else-if="appState.desktop" :node="appState.desktop" :ctx="rootCtx" />
+  <NodeRenderer v-else-if="appState.desktop" :key="remountKey" :node="appState.desktop" :ctx="rootCtx" />
 </template>

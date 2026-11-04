@@ -1,7 +1,7 @@
 {
   "type": "desktop",
   "id": "userfront-desktop",
-  "component": "frame-with-title-and-menu-footer",
+  "component": "app-layout",
   "children": [
     {
       "slot": "icon",
@@ -19,11 +19,11 @@
     },
     {
       "slot": "menu",
-      "component": "menu-tree"
+      "component": "nav-menu"
     },
     {
       "slot": "breadcrumb",
-      "component": "breadcrumb-auto"
+      "component": "breadcrumb"
     },
     {
       "slot": "footer",
@@ -72,7 +72,7 @@
       "slot": "content",
       "title": "工作台",
       "description": "你好，欢迎回来 —— 这里汇总了你的常用信息",
-      "component": "page-default",
+      "component": "page-view",
       "children": [
         {
           "component": "row",
@@ -139,7 +139,7 @@
       "slot": "content",
       "title": "个人资料",
       "description": "维护你在组织内的基本信息",
-      "component": "page-default",
+      "component": "page-view",
       "children": [
         {
           "component": "card",
@@ -184,7 +184,7 @@
       "slot": "content",
       "title": "我的订单",
       "description": "全部订阅与商城订单",
-      "component": "page-default",
+      "component": "page-view",
       "children": [
         {
           "component": "card",
@@ -207,12 +207,12 @@
               "paginated": true,
               "pageSize": 8,
               "column": [
-                { "component": "field-placeholder", "field": "@@MyOrder.id" },
-                { "component": "field-placeholder", "field": "@@MyOrder.product" },
-                { "component": "field-placeholder", "field": "@@MyOrder.qty", "align": "right" },
-                { "component": "field-placeholder", "field": "@@MyOrder.amount", "align": "right", "format": "currency" },
-                { "component": "field-placeholder", "field": "@@MyOrder.date" },
-                { "component": "field-placeholder", "field": "@@MyOrder.status" }
+                { "component": "field-list", "field": "@@MyOrder.id" },
+                { "component": "field-list", "field": "@@MyOrder.product" },
+                { "component": "field-list", "field": "@@MyOrder.qty", "align": "right" },
+                { "component": "field-list", "field": "@@MyOrder.amount", "align": "right", "format": "currency" },
+                { "component": "field-list", "field": "@@MyOrder.date" },
+                { "component": "field-list", "field": "@@MyOrder.status" }
               ]
             }
           ]

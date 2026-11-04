@@ -42,16 +42,43 @@ export interface Node {
   [key: string]: any
 }
 
+/** 角色定义（menu.json 的 roles 数组，§3 角色与菜单权限） */
+export interface RoleDef {
+  id: string
+  label: string
+  description?: string
+}
+
 export interface MenuItem {
   label: string
   pageId?: string
   icon?: string
+  /** 可见角色白名单；缺省 = 所有角色可见 */
+  roles?: string[]
   children?: MenuItem[]
 }
 
 export interface MenuConfig {
   title?: string
+  /** 系统角色定义；缺省 = 该系统无角色体系（不显示角色切换器） */
+  roles?: RoleDef[]
   items: MenuItem[]
+}
+
+/** systems/index.json 清单条目（§15：按系统声明套件与主题） */
+export interface SystemEntry {
+  id: string
+  label: string
+  /** 组件契约实现套件（src/kits/）；缺省用清单 defaultKit */
+  kit?: string
+  /** CSS 变量主题（src/style.css [data-theme]）；缺省用清单 defaultTheme */
+  theme?: string
+}
+
+export interface SystemsManifest {
+  defaultKit?: string
+  defaultTheme?: string
+  systems: SystemEntry[]
 }
 
 export interface Crumb {

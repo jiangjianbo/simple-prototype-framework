@@ -55,7 +55,7 @@ function tooltip(d: any): string {
 </script>
 
 <template>
-  <VisXYContainer :height="props.height" :margin="{ left: 8, right: 8, top: 8 }" class="w-full">
+  <VisXYContainer :data="props.data ?? []" :height="props.height" :margin="{ left: 8, right: 8, top: 8 }" class="w-full">
     <VisStackedBar :x="x" :y="ys" :color="colorFn" :bar-padding="0.25" :rounded-corners="4" />
     <VisAxis type="x" :tick-format="xTickFormat" />
     <VisAxis type="y" :tick-format="yTickFormat" :grid-line="true" :num-ticks="4" />

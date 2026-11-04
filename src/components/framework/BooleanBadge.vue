@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Badge } from '@/components/ui/badge'
+import { resolveComponent } from '@/registry'
+
+const Badge = resolveComponent('badge')!
 
 const props = defineProps<{
   value?: boolean | null

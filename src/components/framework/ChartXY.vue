@@ -66,7 +66,7 @@ function tooltip(d: any): string {
 </script>
 
 <template>
-  <VisXYContainer :height="props.height" :margin="{ left: 8, right: 8, top: 8 }" class="w-full">
+  <VisXYContainer :data="props.data ?? []" :height="props.height" :margin="{ left: 8, right: 8, top: 8 }" class="w-full">
     <template v-if="props.variant === 'area'">
       <VisArea :x="x" :y="ys" :color="colorFn" :opacity="props.areaOpacity" curve-type="monotoneX" />
       <VisLine :x="x" :y="ys" :color="colorFn" :line-width="2" curve-type="monotoneX" />

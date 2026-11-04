@@ -6,7 +6,8 @@
   "scripts": {
     "gen:metadata": "tsx src/metadata/generate-metadata.ts",
     "dev": "npm run gen:metadata && vite",
-    "build": "npm run gen:metadata && vite build",
+    "build": "npm run gen:metadata && vite build && tsx scripts/build-static.ts",
+    "build:client": "npm run gen:metadata && vite build",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit"
   },

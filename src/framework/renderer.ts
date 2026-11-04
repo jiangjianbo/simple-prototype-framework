@@ -2,7 +2,7 @@
  * 递归渲染核心（§5.2）
  *
  * 职责：
- *   - 未知组件兜底 fallback-display
+ *   - 未知组件兜底 missing-component
  *   - data 引用解析（@@ 元数据 / @ 属性 / @/ 资源；/ 文件引用已在加载期内联）
  *   - mode 继承与覆盖、disabled 自动注入
  *   - @goto 与状态机事件注入（onClick / onUpdate:modelValue）
@@ -20,7 +20,7 @@ import { expandTypeRef } from './metadata'
 import { isAttrRef, isAssetRef, isTypeRef, resolveAssetUrl, resolveAttr } from './resolver'
 import { navigate } from './navigation'
 import { ensurePageEngine } from './page-engine'
-import FallbackDisplay from '@/components/framework/FallbackDisplay.vue'
+import FallbackDisplay from '@/components/framework/MissingComponent.vue'
 
 export const MODE_KEY: any = Symbol('pp-mode')
 export const CTX_KEY: any = Symbol('pp-ctx')

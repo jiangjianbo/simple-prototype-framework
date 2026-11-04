@@ -12,6 +12,7 @@
  */
 
 import type { Node } from './types'
+import { getBootstrap } from './static-bootstrap'
 
 /** 允许做 `/` 文件内联的属性（设计文档仅定义 data，此处按需扩展） */
 export const FILE_REF_PROPS = ['data', 'rows', 'value', 'items', 'options'] as const
@@ -32,9 +33,11 @@ export function isFileRef(v: unknown): v is string {
   return typeof v === 'string' && v.startsWith('/')
 }
 
-/** `@/brain.png` → `/systems/{system}/assets/brain.png` */
+/** `@/brain.png` → `/systems/{system}/assets/brain.png`；静态模式命中内嵌 data URL */
 export function resolveAssetUrl(ref: string, system: string): string {
-  return `/systems/${system}/assets/${ref.slice(2)}`
+  const name = ref.slice(2)
+  const embedded = getBootstrap()?.assets[`${system}/${name}`]
+  return embedded ?? `/systems/${system}/assets/${name}`
 }
 
 /** `@attr` 属性查找：当前节点 → 逐级向上 */
@@ -48,12 +51,17 @@ export function resolveAttr(path: string, node: Node, scopeStack: Node[]): any {
 }
 
 async function fetchJson(url: string): Promise<any> {
+  // 静态构建模式：全部内容内嵌在页面 bootstrap 里，不发网络请求（file:// 可直开）
+  const embedded = getBootstrap()?.files[url]
+  if (embedded != null) return JSON.parse(embedded)
   const res = await fetch(url)
   if (!res.ok) throw new Error(`加载失败 ${url}: ${res.status}`)
   return res.json()
 }
 
 async function fetchText(url: string): Promise<string> {
+  const embedded = getBootstrap()?.files[url]
+  if (embedded != null) return embedded
   const res = await fetch(url)
   if (!res.ok) throw new Error(`加载失败 ${url}: ${res.status}`)
   return res.text()

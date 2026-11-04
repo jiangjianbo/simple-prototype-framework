@@ -37,7 +37,7 @@ const flush = async (n = 4) => { for (let i = 0; i < n; i++) await nextTick() }
 const settle = async (ms = 30) => { await new Promise(r => setTimeout(r, ms)); await flush(6) }
 
 const clickMenu = (wrapper: any, label: string) => {
-  const btn = wrapper.findAll('aside button').find(b => b.text().trim() === label)
+  const btn = wrapper.findAll('aside button').find((b: any) => b.text().trim() === label)
   if (!btn) throw new Error('菜单不存在: ' + label)
   btn.element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
 }
