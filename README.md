@@ -95,7 +95,7 @@ src/
 
 ## 多系统
 
-`systems/index.json` 声明系统清单；顶栏切换器调用 `loadSystem(id)` 完整重载（销毁状态机引擎 → 拉取 menu/page 配置 → 预处理内联 → 重建树索引 → 定位首页）。页面配置支持两种形态：`{ "desktop": {...} }` 包装式（back）或根节点即 desktop 节点（userfront）。
+`systems/index.json` 声明系统清单；顶栏切换器调用 `loadSystem(id)` 完整重载（销毁状态机引擎 → 拉取 menu/page 配置 → 预处理内联 → 重建树索引 → 定位首页）。页面配置支持两种形态：`{ "desktop": {...} }` 包装式（back）或根节点即 desktop 节点（userfront）。条目 `enabled: false` 手工下架——不进入原型切换下拉，静态构建也跳过；缺省视为启用。
 
 ## 套件与主题（组件实现 × 配色，自由组合）
 

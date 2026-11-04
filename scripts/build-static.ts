@@ -124,6 +124,11 @@ async function main() {
 
   for (const system of manifest.systems) {
     const id: string = system.id
+    // enabled: false = 手工下架：不产出静态页（下拉列表同样由 boot 过滤）
+    if (system.enabled === false) {
+      console.log(`[static] 跳过禁用系统: ${id}`)
+      continue
+    }
     const menuPath = `/systems/${id}/${id}.menu.json`
     const pagePath = `/systems/${id}/${id}.page.json`
     const menuText = readFileSync(urlToFile(menuPath), 'utf-8')

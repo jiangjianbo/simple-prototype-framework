@@ -50,7 +50,7 @@ export async function boot() {
     const manifest = await fetchJson('/systems/index.json').catch(() => ({ systems: [] }) as SystemsManifest)
     manifestDefaults.kit = manifest.defaultKit ?? DEFAULT_KIT
     manifestDefaults.theme = manifest.defaultTheme ?? DEFAULT_THEME
-    appState.systems = manifest.systems ?? []
+    appState.systems = (manifest.systems ?? []).filter((s: SystemEntry) => s.enabled !== false)
     // 静态页只内嵌了本系统的配置，默认定位到构建时指定的系统
     const first = boot?.system ?? appState.systems[0]?.id ?? 'back'
     await loadSystem(first)

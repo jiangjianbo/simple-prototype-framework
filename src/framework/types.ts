@@ -73,6 +73,8 @@ export interface SystemEntry {
   kit?: string
   /** CSS 变量主题（src/style.css [data-theme]）；缺省用清单 defaultTheme */
   theme?: string
+  /** false = 手工下架：不出现在原型切换下拉，静态构建也跳过；缺省/true = 启用 */
+  enabled?: boolean
 }
 
 export interface SystemsManifest {
