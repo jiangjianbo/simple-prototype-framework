@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <rect x="0" y="0" width="1280" height="8" fill="#6366f1"/>
+  <text x="100" y="120" font-family="sans-serif" font-size="40" font-weight="700" fill="#1e1b4b">今日议程</text>
+  <text x="100" y="160" font-family="sans-serif" font-size="18" fill="#818cf8">AGENDA · 45 MIN</text>
+  <g font-family="sans-serif">
+    <rect x="100" y="220" width="1080" height="88" rx="12" fill="#eef2ff"/>
+    <circle cx="156" cy="264" r="22" fill="#6366f1"/><text x="148" y="272" font-size="20" fill="#ffffff">1</text>
+    <text x="210" y="272" font-size="24" fill="#312e81">Q3 业绩复盘：ARR 与 NRR 表现</text>
+    <rect x="100" y="328" width="1080" height="88" rx="12" fill="#f5f3ff"/>
+    <circle cx="156" cy="372" r="22" fill="#8b5cf6"/><text x="148" y="380" font-size="20" fill="#ffffff">2</text>
+    <text x="210" y="380" font-size="24" fill="#312e81">新品发布：Deck. 素材库 2.0</text>
+    <rect x="100" y="436" width="1080" height="88" rx="12" fill="#eef2ff"/>
+    <circle cx="156" cy="480" r="22" fill="#6366f1"/><text x="148" y="488" font-size="20" fill="#ffffff">3</text>
+    <text x="210" y="488" font-size="24" fill="#312e81">增长策略：渠道与生态合作</text>
+    <rect x="100" y="544" width="1080" height="88" rx="12" fill="#f5f3ff"/>
+    <circle cx="156" cy="588" r="22" fill="#8b5cf6"/><text x="148" y="596" font-size="20" fill="#ffffff">4</text>
+    <text x="210" y="596" font-size="24" fill="#312e81">Q4 目标与关键结果</text>
+  </g>
+</svg>

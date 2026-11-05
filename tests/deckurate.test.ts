@@ -1,7 +1,7 @@
 /**
  * deckurate 套件 + deckurate 系统回归：
  * 1) 套件解析（deckurate 覆盖 + 共享扩展契约回落）；2) 系统按声明启动（kit=deckurate / theme=deckurate）；
- * 3) 界面结构（树 / 工具栏 / kbd / tag-list / toggle-group / service-status / progress-ring / 图表 / 表格）。
+ * 3) 界面结构（树 / 工具栏 / kbd / tag-list / data-views / service-status / progress-ring / 图表 / 表格）。
  */
 import { describe, it, expect, beforeAll, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
@@ -48,7 +48,7 @@ describe('deckurate 套件与系统', () => {
     setKit('deckurate')
     expect(resolveComponent('button')).not.toBe(shadcnButton) // deckurate 覆盖生效
     // 共享扩展契约（Deckurate 基础组件引入）经 shadcn 兜底全部可解析
-    for (const name of ['toolbar', 'kbd', 'tag-list', 'toggle-group', 'tree', 'progress-ring', 'service-status']) {
+    for (const name of ['toolbar', 'kbd', 'tag-list', 'toggle-group', 'tree', 'progress-ring', 'service-status', 'select-list', 'card-grid', 'data-views', 'doc-viewer']) {
       expect(resolveComponent(name), name).toBeTruthy()
     }
     setKit('shadcn')
@@ -97,7 +97,7 @@ describe('deckurate 套件与系统', () => {
     expect(tagList.exists()).toBe(true)
     expect(tagList.text()).toContain('新品发布')
     expect(tagList.text()).toMatch(/\+\d/) // 溢出 +N
-    expect(wrapper.find('[data-slot="toggle-group"]').exists()).toBe(true)
+    expect(wrapper.find('[data-slot="data-views"]').exists()).toBe(true)
     // deckurate 表头：大写 + 字距加宽
     const head = wrapper.find('th[data-slot="table-head"]')
     expect(head.exists()).toBe(true)

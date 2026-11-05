@@ -31,6 +31,7 @@ import type { ColumnDef, ExpandedState, SortingState } from '@tanstack/table-cor
 import type { FieldMeta } from '@/framework/types'
 import { formatDate, formatNumber, cn } from '@/lib/utils'
 import { resolveComponent } from '@/registry'
+import { navigate } from '@/framework/navigation'
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Search } from 'lucide-vue-next'
 import FieldValue from './FieldValue.vue'
 import EmptyView from './EmptyView.vue'
@@ -68,6 +69,8 @@ const props = withDefaults(
     groupBy?: string
     /** 列级聚合：{ 字段名: sum|count|avg|min|max } */
     aggregations?: Record<string, string>
+    /** 点击数据行跳转的页面 id（原型「列表项 → 详情」语义） */
+    rowGoto?: string
     emptyText?: string
   }>(),
   // paginated 必须显式默认 true：Vue 会把缺席的 boolean prop 铸造为 false
@@ -75,6 +78,10 @@ const props = withDefaults(
 )
 
 const slots = defineSlots<{ toolbar?: () => any }>()
+
+function onRowClick() {
+  if (props.rowGoto) navigate(props.rowGoto)
+}
 
 // ---------- 列定义 ----------
 const effectiveCols = computed<ColumnConfig[]>(() => {
@@ -250,7 +257,11 @@ function fmtAgg(field: string, rows: any[]): string {
           v-for="row in rows"
           :key="row.id"
           :data-state="row.getIsSelected() ? 'selected' : undefined"
-          :class="cn(row.getIsGrouped() && 'bg-muted/30 hover:bg-muted/30')"
+          :class="cn(
+            row.getIsGrouped() && 'bg-muted/30 hover:bg-muted/30',
+            props.rowGoto && !row.getIsGrouped() && 'hover:bg-accent/50 cursor-pointer',
+          )"
+          @click="!row.getIsGrouped() && onRowClick()"
         >
           <TableCell
             v-for="cell in row.getVisibleCells()"

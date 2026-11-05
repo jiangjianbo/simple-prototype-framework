@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#f8fafc"/>
+  <rect x="0" y="0" width="1280" height="8" fill="#6366f1"/>
+  <text x="100" y="120" font-family="sans-serif" font-size="40" font-weight="700" fill="#1e1b4b">产品矩阵 2.0</text>
+  <g font-family="sans-serif">
+    <rect x="100" y="190" width="520" height="380" rx="16" fill="#ffffff" stroke="#e0e7ff" stroke-width="2"/>
+    <rect x="100" y="190" width="520" height="72" rx="16" fill="#6366f1"/>
+    <text x="132" y="236" font-size="26" font-weight="700" fill="#ffffff">素材库 · 文档智能</text>
+    <text x="132" y="310" font-size="20" fill="#475569">· 多格式解析 PPT / Word / PDF</text>
+    <text x="132" y="352" font-size="20" fill="#475569">· 语义切分与自动打标</text>
+    <text x="132" y="394" font-size="20" fill="#475569">· 全文检索与权限隔离</text>
+    <rect x="132" y="460" width="150" height="48" rx="24" fill="#eef2ff"/>
+    <text x="162" y="490" font-size="18" fill="#6366f1">GA 已发布</text>
+  </g>
+  <g font-family="sans-serif">
+    <rect x="660" y="190" width="520" height="380" rx="16" fill="#ffffff" stroke="#e9d5ff" stroke-width="2"/>
+    <rect x="660" y="190" width="520" height="72" rx="16" fill="#8b5cf6"/>
+    <text x="692" y="236" font-size="26" font-weight="700" fill="#ffffff">选辑 · 快速成稿</text>
+    <text x="692" y="310" font-size="20" fill="#475569">· 片段拖拽重组新文档</text>
+    <text x="692" y="352" font-size="20" fill="#475569">· 品牌模板一键套用</text>
+    <text x="692" y="394" font-size="20" fill="#475569">· 多端导出与分享追踪</text>
+    <rect x="692" y="460" width="150" height="48" rx="24" fill="#f5f3ff"/>
+    <text x="722" y="490" font-size="18" fill="#8b5cf6">Beta 内测中</text>
+  </g>
+</svg>

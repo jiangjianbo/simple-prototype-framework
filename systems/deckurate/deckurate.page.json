@@ -6,6 +6,7 @@
     { "slot": "icon", "component": "icon", "data": "@/deck.svg", "size": "lg" },
     { "slot": "title", "component": "text", "data": "@title", "title": "Deck. 素材库", "size": "base", "strong": true },
     { "slot": "menu", "component": "nav-menu" },
+    { "slot": "menu", "component": "separator", "class": "my-2" },
     { "slot": "menu", "component": "tree", "data": "/systems/deckurate/data/folders.json" },
     { "slot": "breadcrumb", "component": "breadcrumb" },
     { "slot": "footer", "component": "text", "text": "Deck. · 演示素材库原型", "muted": true },
@@ -140,7 +141,7 @@
       "id": "library",
       "slot": "content",
       "title": "文库",
-      "description": "全部素材 · 工具栏 + 标签过滤 + 文档列表（table · @@Document）",
+      "description": "全部素材 · 工具栏 + 标签过滤 + 多视图文档列表（data-views · 列表/画廊）",
       "component": "page-view",
       "children": [
         {
@@ -151,30 +152,47 @@
             { "component": "input", "placeholder": "搜索素材…", "class": "w-52" },
             { "component": "kbd", "text": "⌘K" },
             { "component": "separator", "class": "mx-1 h-5" },
-            { "component": "tag-list", "tags": ["新品发布", "产品介绍", "商务", "白皮书", "案例", "路演", "品牌"], "limit": 4, "clickable": true },
-            { "component": "toggle-group", "modelValue": "list", "options": [
-              { "label": "列表", "value": "list" },
-              { "label": "画廊", "value": "gallery" }
-            ]}
+            { "component": "tag-list", "tags": ["新品发布", "产品介绍", "商务", "白皮书", "案例", "路演", "品牌"], "limit": 4, "clickable": true }
           ]
         },
         {
-          "component": "table",
+          "component": "data-views",
           "title": "全部素材",
-          "rows": "/systems/deckurate/data/documents.json",
-          "searchable": true,
-          "sortable": true,
-          "column": [
-            { "field": "title", "label": "标题" },
-            { "field": "docType", "label": "类型" },
-            { "field": "filename", "label": "文件名" },
-            { "field": "status", "label": "状态" },
-            { "field": "totalSegments", "label": "片段数" },
-            { "field": "tags", "label": "标签" },
-            { "field": "currentVersion", "label": "版本" },
-            { "field": "updatedAt", "label": "更新时间" },
-            { "type": "element", "component": "button", "text": "查看", "variant": "ghost" },
-            { "type": "element", "component": "button", "text": "删除", "variant": "ghost" }
+          "views": [
+            { "id": "list", "label": "列表" },
+            { "id": "gallery", "label": "画廊" }
+          ],
+          "default": "list",
+          "children": [
+            {
+              "slot": "list",
+              "component": "table",
+              "rows": "/systems/deckurate/data/documents.json",
+              "searchable": true,
+              "sortable": true,
+              "rowGoto": "doc-view",
+              "column": [
+                { "field": "title", "label": "标题" },
+                { "field": "docType", "label": "类型" },
+                { "field": "filename", "label": "文件名" },
+                { "field": "status", "label": "状态" },
+                { "field": "totalSegments", "label": "片段数" },
+                { "field": "tags", "label": "标签" },
+                { "field": "currentVersion", "label": "版本" },
+                { "field": "updatedAt", "label": "更新时间" }
+              ]
+            },
+            {
+              "slot": "gallery",
+              "component": "card-grid",
+              "rows": "/systems/deckurate/data/documents.json",
+              "imageField": "cover",
+              "titleField": "title",
+              "metaFields": ["docType", "totalSegments", "updatedAt"],
+              "badgeField": "status",
+              "columns": 3,
+              "rowGoto": "doc-view"
+            }
           ]
         }
       ]
@@ -185,40 +203,41 @@
       "id": "tags",
       "slot": "content",
       "title": "标签管理",
-      "description": "全局标签 · 预览（tag-list）与明细（table · tags.json 实例数据）",
+      "description": "左分类列表（select-list）+ 右标签卡片墙（card-grid · tags.json 实例数据）",
       "component": "page-view",
       "children": [
         {
-          "component": "card",
+          "component": "row",
+          "template": "240px 1fr",
           "children": [
             {
-              "slot": "header",
-              "component": "card-header",
+              "component": "card",
               "children": [
-                { "component": "card-title", "text": "标签总览" },
-                { "component": "card-description", "text": "tag-list · 点击可筛选，超出的折叠为 +N" }
+                {
+                  "slot": "default",
+                  "component": "select-list",
+                  "title": "按分类浏览",
+                  "modelValue": "all",
+                  "items": [
+                    { "id": "all", "label": "全部标签", "count": 12 },
+                    { "id": "market", "label": "市场", "count": 3 },
+                    { "id": "tech", "label": "技术", "count": 3 },
+                    { "id": "sales", "label": "销售", "count": 3 },
+                    { "id": "hr", "label": "人力资源", "count": 1 },
+                    { "id": "design", "label": "设计", "count": 1 },
+                    { "id": "product", "label": "产品", "count": 1 }
+                  ]
+                }
               ]
             },
             {
-              "slot": "default",
-              "component": "tag-list",
-              "tags": ["新品发布", "产品介绍", "白皮书", "安全", "商务", "案例", "内部培训", "品牌", "路演", "技术", "规划", "市场"],
-              "limit": 8,
-              "clickable": true
+              "component": "card-grid",
+              "rows": "/systems/deckurate/data/tags.json",
+              "titleField": "name",
+              "metaFields": ["category", "createdAt"],
+              "badgeField": "usageCount",
+              "columns": 4
             }
-          ]
-        },
-        {
-          "component": "table",
-          "title": "标签明细",
-          "rows": "/systems/deckurate/data/tags.json",
-          "searchable": true,
-          "sortable": true,
-          "column": [
-            { "field": "name", "label": "名称" },
-            { "field": "category", "label": "分类" },
-            { "field": "usageCount", "label": "使用次数" },
-            { "field": "createdAt", "label": "创建时间" }
           ]
         }
       ]
@@ -246,6 +265,44 @@
             { "field": "totalSegments", "label": "片段数" },
             { "field": "createdAt", "label": "创建时间" },
             { "type": "element", "component": "button", "text": "查看", "variant": "ghost" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "type": "page",
+      "id": "doc-view",
+      "slot": "content",
+      "title": "文档查看",
+      "description": "Q4 产品发布会 · 缩略图导轨 + 主视图 + 可折叠工具区（doc-viewer）",
+      "component": "page-view",
+      "children": [
+        {
+          "component": "doc-viewer",
+          "toolsTitle": "文档信息",
+          "items": [
+            { "image": "/systems/deckurate/assets/slide-1.svg", "label": "封面" },
+            { "image": "/systems/deckurate/assets/slide-2.svg", "label": "议程" },
+            { "image": "/systems/deckurate/assets/slide-3.svg", "label": "增长复盘" },
+            { "image": "/systems/deckurate/assets/slide-4.svg", "label": "产品矩阵" },
+            { "image": "/systems/deckurate/assets/slide-5.svg", "label": "结尾" }
+          ],
+          "children": [
+            { "slot": "tools", "component": "text", "text": "Q4 产品发布会", "strong": true },
+            { "slot": "tools", "component": "text", "text": "q4-launch.pptx · slider · v3", "muted": true },
+            { "slot": "tools", "component": "separator" },
+            { "slot": "tools", "component": "descriptions", "bordered": false, "columns": 1,
+              "fields": [
+                { "name": "pages", "label": "页数", "type": "string", "isArray": false },
+                { "name": "size", "label": "大小", "type": "string", "isArray": false },
+                { "name": "updatedAt", "label": "更新", "type": "string", "isArray": false }
+              ],
+              "data": { "pages": "24 页", "size": "8.0 MB", "updatedAt": "2026-11-01" } },
+            { "slot": "tools", "component": "tag-list", "tags": ["新品发布", "产品介绍"] },
+            { "slot": "tools", "component": "separator" },
+            { "slot": "tools", "component": "button", "text": "下载原文", "variant": "outline", "class": "w-full" },
+            { "slot": "tools", "component": "button", "text": "分享选辑", "variant": "primary", "class": "w-full" }
           ]
         }
       ]

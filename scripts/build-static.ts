@@ -59,11 +59,12 @@ function installDiskFetch() {
   }
 }
 
-/** 递归收集树里的引用：`@/` 资源与 `__smSrc` 状态机（/file 引用已被 preprocessNode 内联） */
-function collectRefs(node: any, out: { assets: Set<string>; smPaths: Set<string> }) {
+/** 递归收集树里的引用：`@/` 资源、rows 内嵌数据里的 /systems/<id>/assets/ 图片、__smSrc 状态机。
+ *  资产统一归一化为 `<系统id>/<资源名>` 键（两种来源同构）。 */
+function collectRefs(node: any, out: { assets: Set<string>; smPaths: Set<string> }, systemId: string) {
   if (node == null) return
   if (Array.isArray(node)) {
-    for (const n of node) collectRefs(n, out)
+    for (const n of node) collectRefs(n, out, systemId)
     return
   }
   if (typeof node !== 'object') return
@@ -71,11 +72,29 @@ function collectRefs(node: any, out: { assets: Set<string>; smPaths: Set<string>
     if (k === '__smSrc' && Array.isArray(v)) {
       for (const p of v) if (typeof p === 'string') out.smPaths.add(p)
     } else if (typeof v === 'string' && v.startsWith('@/')) {
-      out.assets.add(v.slice(2))
+      out.assets.add(`${systemId}/${v.slice(2)}`)
+    } else if (typeof v === 'string' && /^\/systems\/[^/]+\/assets\//.test(v)) {
+      // 实例数据（rows 内联 JSON 等）里指向系统资产的 URL：file:// 下 img 无法 fetch，改写为 data URL
+      out.assets.add(v.replace(/^\/systems\//, '').replace(/^([^/]+)\/assets\//, '$1/'))
     } else {
-      collectRefs(v, out)
+      collectRefs(v, out, systemId)
     }
   }
+}
+
+/** 递归改写：/systems/<id>/assets/x → assets 表中的 data URL */
+function rewriteAssetPaths(node: any, assets: Record<string, string>): any {
+  if (node == null) return node
+  if (Array.isArray(node)) return node.map(n => rewriteAssetPaths(n, assets))
+  if (typeof node !== 'object') {
+    if (typeof node === 'string' && /^\/systems\/[^/]+\/assets\//.test(node)) {
+      return assets[node.replace(/^\/systems\//, '').replace(/^([^/]+)\/assets\//, '$1/')] ?? node
+    }
+    return node
+  }
+  const out: any = {}
+  for (const [k, v] of Object.entries(node)) out[k] = rewriteAssetPaths(v, assets)
+  return out
 }
 
 /** JSON 安全地内嵌进 HTML：全部 `<` 转义为 \u003c（合法 JSON 转义，且不会截断 script 块） */
@@ -136,12 +155,26 @@ async function main() {
 
     // 与运行时 loadSystem 同链路：内联 /file 引用（两种页面配置形态都支持）
     const raw = pageCfg.desktop ?? (pageCfg.type === 'desktop' ? pageCfg : null)
-    const page = await preprocessNode(raw)
+    let page: any = await preprocessNode(raw)
     if (!page) throw new Error(`系统 ${id} 的页面配置缺少 desktop 节点`)
 
-    // 收集状态机源文本与 @/ 资源
+    // 收集状态机源文本与资产引用（@/ 与实例数据里的 /systems/ 路径，统一 <id>/<名> 键）
     const refs = { assets: new Set<string>(), smPaths: new Set<string>() }
-    collectRefs(page, refs)
+    collectRefs(page, refs, id)
+
+    const assets: Record<string, string> = {}
+    for (const key of refs.assets) {
+      const slash = key.indexOf('/')
+      const sid = key.slice(0, slash)
+      const name = key.slice(slash + 1)
+      const file = join(SYSTEMS, sid, 'assets', name)
+      const dataUrl = existsSync(file) ? toDataUrl(file) : null
+      if (!dataUrl) throw new Error(`系统 ${id} 资源不存在或格式不支持: ${key}`)
+      assets[key] = dataUrl
+    }
+
+    // rows 内嵌数据里的资产路径改写为 data URL（file:// 直开可用）
+    page = rewriteAssetPaths(page, assets)
 
     const files: Record<string, string> = {
       '/metadata.json': metadataText,
@@ -153,14 +186,6 @@ async function main() {
       const file = urlToFile(p)
       if (!existsSync(file)) throw new Error(`系统 ${id} 状态机文件不存在: ${p}`)
       files[p] = readFileSync(file, 'utf-8')
-    }
-
-    const assets: Record<string, string> = {}
-    for (const name of refs.assets) {
-      const file = join(SYSTEMS, id, 'assets', name)
-      const dataUrl = existsSync(file) ? toDataUrl(file) : null
-      if (!dataUrl) throw new Error(`系统 ${id} 资源不存在或格式不支持: @/${name}`)
-      assets[`${id}/${name}`] = dataUrl
     }
 
     const bootstrapBlock = `    <script type="application/json" id="${BOOTSTRAP_ID}">${jsonForHtml({ system: id, files, assets })}</script>`

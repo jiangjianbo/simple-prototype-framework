@@ -102,6 +102,7 @@ src/
 - **套件（Kit）**：组件契约的一套实现，可按系统声明（`index.json` 条目 `kit` 字段）。注册表是「契约名 → 当前套件实现」的解析视图，套件可**部分覆盖**——未覆盖的契约名回落默认套件，继承的复合件（表单/表格/标签页）经契约解析自动随套件变形。内置：`shadcn`（精致风，全量+兜底）、`plain`（原生极简风，直角细边框）、`deckurate`（复刻 [Deckurate-Front](https://github.com/jiangjianbo/Deckurate-Front) 基础组件视觉：灰底描边按钮、胶囊徽标、下划线标签页、大写表头、语义色统计卡）。顶栏「套件」下拉运行时切换（整树按新实现重挂载）。
 - **主题（Theme）**：CSS 变量配色，与套件正交。内置 `light` 浅色 / `dark` 深色（`html.dark` class）/ `warm` 暖沙（`data-theme` 属性）/ `deckurate` 靛蓝，顶栏切换即时生效；按系统声明（`theme` 字段）。
 - **扩展契约**：自 Deckurate 基础组件引入 7 个套件无关新契约（`toolbar` / `kbd` / `tag-list` / `toggle-group` / `tree` / `progress-ring` / `service-status`），注册于 shadcn 套件，全套餐件共享。
+- **多形态契约**：`data-views` 同数据多视图切换（列表↔画廊，每个视图一个具名插槽）、`card-grid` 卡片画廊、`doc-viewer` PowerPoint 式三栏查看器（缩略图轨/主视图/可折叠工具区）、`select-list` 单选列表、`table` 行级 `rowGoto`、菜单项 `count` 计数——deckurate 原型的文库/标签/查看页即由这些通用形态组装（示例见 deckurate 系统）。
 - **场景布局（Scene Layout）**：每个界面的最底层布局，一个系统可多场景并存——`app-layout` 主应用（desktop 标准）、`login-layout` 登录/注册页、`screen-layout` 数据大屏（示例见 back 系统「安全大屏」页）。所有场景布局统一提供 `controls` 槽承载原型切换器（系统/套件/主题/角色），留空自动回落契约组件 `layout-controls`。
 - 契约名已于 2026-11 全量改为约定俗成的语义名（`app-layout` / `page-view` / `nav-menu` / `breadcrumb` / `field-list` / `boolean-badge` / `missing-component` 等），旧名（含 `app-shell`）经别名层永久兼容。每个组件的名称/参数/插槽规范见 **doc/组件规范.md**。
 
@@ -123,7 +124,8 @@ vitest + jsdom 进程内挂载真实 `App.vue`，`fetch` stub 直接读取 `syst
 8. 静态构建模式（static-mode.test.ts）：bootstrap 数据块注入后零网络加载完整页面（含状态机与资源 data URL），系统切换转发到 `../<id>/index.html`；
 9. 套件与主题（kits.test.ts）：旧名别名解析、按系统声明应用（userfront=plain/warm）、运行时切套件整树重挂载、三主题生效方式（dark class / data-theme）；
 10. 场景布局（layouts.test.ts）：app-layout / login-layout / screen-layout 的 `controls` 槽留空回落 `layout-controls`、写 children 整簇替换、各场景结构（登录面板 / 大屏标题栏 / footer）；
-11. deckurate 套件与系统（deckurate.test.ts）：套件覆盖解析（button 换实现）、共享扩展契约经兜底可解析、按系统声明启动（kit=deckurate/theme=deckurate）、仪表盘与文库页结构（树 / 工具栏 / kbd / tag-list / toggle-group / service-status / progress-ring / 大写表头）。
+11. deckurate 套件与系统（deckurate.test.ts）：套件覆盖解析（button 换实现）、共享扩展契约经兜底可解析、按系统声明启动（kit=deckurate/theme=deckurate）、仪表盘与文库页结构（树 / 工具栏 / kbd / tag-list / data-views / service-status / progress-ring / 大写表头）；
+12. 原型多形态契约（deckurate-views.test.ts）：菜单项计数与侧栏上下分区、文库 data-views 列表↔画廊切换、表格行 `rowGoto` 进 doc-viewer（缩略图轨 / 主视图 / 工具区折叠）、标签管理 select-list + card-grid 左右布局。
 
 ## 设计约束与已知边界
 

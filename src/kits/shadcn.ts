@@ -37,6 +37,10 @@ import ToggleGroup from '@/components/framework/ToggleGroup.vue'
 import TreeView from '@/components/framework/TreeView.vue'
 import ProgressRing from '@/components/framework/ProgressRing.vue'
 import ServiceStatus from '@/components/framework/ServiceStatus.vue'
+import SelectList from '@/components/framework/SelectList.vue'
+import CardGrid from '@/components/framework/CardGrid.vue'
+import DataViews from '@/components/framework/DataViews.vue'
+import DocViewer from '@/components/framework/DocViewer.vue'
 import PageView from '@/components/framework/PageView.vue'
 import NavMenu from '@/components/framework/NavMenu.vue'
 import Breadcrumb from '@/components/framework/Breadcrumb.vue'
@@ -149,6 +153,10 @@ export const SHADCN_KIT: Record<string, Component> = {
   tree: TreeView,
   'progress-ring': ProgressRing,
   'service-status': ServiceStatus,
+  'select-list': SelectList,
+  'card-grid': CardGrid,
+  'data-views': DataViews,
+  'doc-viewer': DocViewer,
 
   // ===== 场景布局 =====
   'app-layout': AppLayout,

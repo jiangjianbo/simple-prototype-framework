@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <rect width="400" height="225" fill="#eef2ff"/>
+  <rect x="130" y="24" width="140" height="177" rx="8" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+  <rect x="150" y="48" width="80" height="10" rx="5" fill="#4f46e5"/>
+  <rect x="150" y="72" width="100" height="6" rx="3" fill="#c7d2fe"/>
+  <rect x="150" y="86" width="100" height="6" rx="3" fill="#c7d2fe"/>
+  <rect x="150" y="100" width="72" height="6" rx="3" fill="#c7d2fe"/>
+  <rect x="150" y="126" width="100" height="34" rx="4" fill="#e0e7ff"/>
+  <rect x="150" y="170" width="100" height="6" rx="3" fill="#c7d2fe"/>
+  <text x="286" y="200" font-family="sans-serif" font-size="15" font-weight="600" fill="#6366f1">DOC</text>
+</svg>

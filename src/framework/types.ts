@@ -53,6 +53,8 @@ export interface MenuItem {
   label: string
   pageId?: string
   icon?: string
+  /** 条目计数（右侧弱化数字，如文档数/未读数）；缺省不显示 */
+  count?: number
   /** 可见角色白名单；缺省 = 所有角色可见 */
   roles?: string[]
   children?: MenuItem[]

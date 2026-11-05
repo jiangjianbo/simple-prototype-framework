@@ -4,7 +4,7 @@ import type { MenuItem } from '@/framework/types'
 import { appState } from '@/framework/app-store'
 import { navigate, getTreeIndex } from '@/framework/navigation'
 import { resolveIcon } from '@/lib/icon-map'
-import { cn } from '@/lib/utils'
+import { formatNumber, cn } from '@/lib/utils'
 
 const props = withDefaults(
   defineProps<{
@@ -26,6 +26,11 @@ function isActive(item: MenuItem): boolean {
 
 function iconOf(item: MenuItem): Component {
   return resolveIcon(item.icon)
+}
+
+/** 计数千分位（99+ 不截断，直接格式化数字） */
+function formatCount(n: number): string {
+  return formatNumber(n)
 }
 
 function itemClass(item: MenuItem): string {
@@ -61,7 +66,16 @@ function indentStyle(item: MenuItem) {
         <button :class="itemClass(item)" :style="indentStyle(item)" @click="open(item)">
           <component :is="iconOf(item)" v-if="item.icon" class="size-4 shrink-0" />
           <span class="truncate">{{ item.label }}</span>
-          <span v-if="item.pageId !== appState.currentPageId && isActive(item)" class="ml-auto size-1.5 rounded-full bg-primary/60" />
+          <span
+            v-if="item.count != null"
+            class="ml-auto text-xs tabular-nums"
+            :class="isActive(item) ? 'text-primary/80' : 'text-muted-foreground/70'"
+          >{{ formatCount(item.count) }}</span>
+          <span
+            v-if="item.pageId !== appState.currentPageId && isActive(item)"
+            class="size-1.5 rounded-full bg-primary/60"
+            :class="item.count != null ? '' : 'ml-auto'"
+          />
         </button>
         <MenuGroup v-if="item.children?.length" :items="item.children" :depth="props.depth + 1" />
       </div>
