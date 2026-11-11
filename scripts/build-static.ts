@@ -153,9 +153,9 @@ async function main() {
     const menuText = readFileSync(urlToFile(menuPath), 'utf-8')
     const pageCfg = JSON.parse(readFileSync(urlToFile(pagePath), 'utf-8'))
 
-    // 与运行时 loadSystem 同链路：内联 /file 引用（两种页面配置形态都支持）
+    // 与运行时 loadSystem 同链路：内联 /file 引用与 $ref 拆分引用（两种页面配置形态都支持）
     const raw = pageCfg.desktop ?? (pageCfg.type === 'desktop' ? pageCfg : null)
-    let page: any = await preprocessNode(raw)
+    let page: any = await preprocessNode(raw, 0, id)
     if (!page) throw new Error(`系统 ${id} 的页面配置缺少 desktop 节点`)
 
     // 收集状态机源文本与资产引用（@/ 与实例数据里的 /systems/ 路径，统一 <id>/<名> 键）

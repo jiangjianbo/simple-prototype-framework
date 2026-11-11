@@ -72,18 +72,36 @@ export { fetchJson, fetchText }
 /**
  * 加载阶段预处理：把节点树中的 `/file.json` 引用内联为文件内容。
  * 递归处理 children 与 column 数组（column 为配置型子节点）。
+ *
+ * `$ref` 节点引用（§4.6 页面拆分）：值为相对 systems/<base>/ 的路径，
+ * 或 `/` 开头的完整 Web 路径；加载期取文件内容浅合并（内联字段覆盖文件字段）。
+ * base 为系统 id（由 loadSystem / build-static 传入），无 base 时相对引用报错。
  */
-export async function preprocessNode(node: any, depth = 0): Promise<any> {
+export async function preprocessNode(node: any, depth = 0, base = ''): Promise<any> {
   if (node == null) return node
   if (Array.isArray(node)) {
     const out = []
-    for (const n of node) out.push(await preprocessNode(n, depth))
+    for (const n of node) out.push(await preprocessNode(n, depth, base))
     return out
   }
   if (typeof node !== 'object') return node
   if (depth > 32) throw new Error('文件引用嵌套过深（可能存在循环引用）')
 
-  const out: Record<string, any> = { ...node }
+  let out: Record<string, any> = { ...node }
+
+  const ref = out.$ref
+  if (typeof ref === 'string') {
+    if (!ref.startsWith('/') && !base) {
+      throw new Error(`$ref 相对路径需要系统上下文（base）：${ref}`)
+    }
+    const url = ref.startsWith('/') ? ref : `/systems/${base}/${ref}`
+    const file = await fetchJson(url)
+    if (file == null || typeof file !== 'object' || Array.isArray(file)) {
+      throw new Error(`$ref 引用内容必须是 JSON 对象: ${url}`)
+    }
+    const { $ref: _omit, ...inline } = out
+    out = { ...file, ...inline }
+  }
 
   for (const prop of FILE_REF_PROPS) {
     const v = out[prop]
@@ -104,7 +122,7 @@ export async function preprocessNode(node: any, depth = 0): Promise<any> {
     out.__smSrc = out.stateMachine.map((e: any) => e.src).filter((s: any) => typeof s === 'string')
   }
 
-  if (out.children) out.children = await preprocessNode(out.children, depth + 1)
-  if (Array.isArray(out.column)) out.column = await preprocessNode(out.column, depth + 1)
+  if (out.children) out.children = await preprocessNode(out.children, depth + 1, base)
+  if (Array.isArray(out.column)) out.column = await preprocessNode(out.column, depth + 1, base)
   return out
 }

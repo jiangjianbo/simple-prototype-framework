@@ -1,8 +1,9 @@
 /**
- * 静态构建模式回归：把真实配置按构建期同样链路（preprocessNode 内联 /file 引用）
+ * 静态构建模式回归：把真实配置按构建期同样链路（preprocessNode 内联 /file 与 $ref 引用）
  * 组装成 bootstrap 数据块注入 jsdom，fetch 一律禁止 —— 验证 file:// 直开场景下
  * 应用能完整加载、状态机可用、菜单角色过滤生效、资源引用命中内嵌 data URL、
- * 切系统走兄弟静态页跳转而非进程内重载。
+ * 切系统走兄弟静态页跳转而非进程内重载、$ref 拆分页内容已内联、hash 保位
+ * （本系统页面/角色恢复，跨系统 hash 回落本系统默认）。
  *
  * scripts/build-static.ts 用的是同一套组装逻辑，此处是对其产物运行时行为的等价验证。
  */
@@ -19,8 +20,8 @@ const jsonForHtml = (v: unknown) => JSON.stringify(v).replace(/</g, '\\u003c')
 
 const read = (p: string) => readFileSync(join(ROOT, p), 'utf-8')
 
-/** 构建期同款组装：读盘 + preprocessNode 内联 /file 引用（临时 stub fetch 到磁盘） */
-async function buildBackBootstrap() {
+/** 构建期同款读盘 stub（scripts/build-static.ts 的 installDiskFetch） */
+const stubDiskFetch = () => {
   vi.stubGlobal('fetch', async (url: string) => {
     const path = String(url).split('?')[0]
     const file = path.startsWith('/systems/')
@@ -29,6 +30,11 @@ async function buildBackBootstrap() {
     const text = readFileSync(file, 'utf-8')
     return { ok: true, status: 200, text: async () => text, json: async () => JSON.parse(text) }
   })
+}
+
+/** 构建期同款组装：读盘 + preprocessNode 内联 /file 引用（临时 stub fetch 到磁盘） */
+async function buildBackBootstrap() {
+  stubDiskFetch()
   const pageCfg = JSON.parse(read('systems/back/back.page.json'))
   const page = await preprocessNode(pageCfg.desktop)
   return {
@@ -46,6 +52,26 @@ async function buildBackBootstrap() {
   }
 }
 
+/** userfront：$ref 拆分页系统。base=id 必传，两种配置形态与 build-static.ts L157 一致 */
+async function buildUserfrontBootstrap() {
+  stubDiskFetch()
+  const pageCfg = JSON.parse(read('systems/userfront/userfront.page.json'))
+  const raw = pageCfg.desktop ?? (pageCfg.type === 'desktop' ? pageCfg : null)
+  const page = await preprocessNode(raw, 0, 'userfront')
+  return {
+    system: 'userfront',
+    files: {
+      '/metadata.json': read('public/metadata.json'),
+      '/systems/index.json': read('systems/index.json'),
+      '/systems/userfront/userfront.menu.json': read('systems/userfront/userfront.menu.json'),
+      '/systems/userfront/userfront.page.json': JSON.stringify(page),
+    },
+    assets: {
+      'userfront/logo.svg': 'data:image/svg+xml;base64,' + readFileSync(join(ROOT, 'systems/userfront/assets/logo.svg')).toString('base64'),
+    },
+  }
+}
+
 function injectBootstrap(payload: unknown) {
   document.getElementById('pp-bootstrap')?.remove()
   const el = document.createElement('script')
@@ -59,8 +85,8 @@ function injectBootstrap(payload: unknown) {
 
 /** 静态模式下不允许任何网络请求：file:// 直开时 fetch 本就不可用 */
 const stubNoNetwork = () => {
-  vi.stubGlobal('fetch', async () => {
-    throw new Error('静态模式不应发起网络请求')
+  vi.stubGlobal('fetch', async (url: unknown) => {
+    throw new Error(`静态模式不应发起网络请求: ${String(url)}`)
   })
 }
 
@@ -133,5 +159,46 @@ describe('静态构建模式（file:// 直开）', () => {
     expect(appState.system).toBe('back')
     setStaticNavigator(url => window.location.assign(url))
     wrapper.unmount()
+  }, 20000)
+
+  it('$ref 拆分页：构建期内联进页面树，零网络可渲染；切页后静态页同样写 hash 保位', async () => {
+    injectBootstrap(await buildUserfrontBootstrap())
+    stubNoNetwork()
+
+    const wrapper = mount(App)
+    await settle(80)
+    expect(appState.status, `boot error: ${appState.error}`).toBe('ready')
+    expect(appState.system).toBe('userfront')
+
+    // 我的订单 = pages/orders.json 拆分页：内容已在构建期随 $ref 内联，点击即可渲染
+    const btn = wrapper.findAll('aside button').find(b => b.text().trim() === '我的订单')!
+    btn.element.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await settle()
+    expect(h1(wrapper)).toBe('我的订单')
+    // 静态模式同样写 URL hash（刷新/分享链接保位），角色为菜单第一个
+    expect(location.hash).toBe('#/userfront/orders?role=member')
+    wrapper.unmount()
+  }, 20000)
+
+  it('hash 保位：boot 恢复本系统页面与角色；跨系统 hash 整体回落本系统默认', async () => {
+    injectBootstrap(await buildBackBootstrap())
+    stubNoNetwork()
+
+    location.hash = '#/back/user-list?role=auditor'
+    const wrapper = mount(App)
+    await settle(80)
+    expect(appState.system).toBe('back')
+    expect(appState.currentPageId).toBe('user-list')
+    expect(appState.role).toBe('auditor')
+    wrapper.unmount()
+
+    // hash 指向其它系统：静态页只内嵌了本系统配置，回落默认（首角色 + 首页面）
+    location.hash = '#/userfront/orders'
+    const wrapper2 = mount(App)
+    await settle(80)
+    expect(appState.system).toBe('back')
+    expect(appState.role).toBe('admin')
+    expect(h1(wrapper2)).toBe('安全概览')
+    wrapper2.unmount()
   }, 20000)
 })

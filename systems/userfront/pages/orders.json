@@ -1,0 +1,41 @@
+{
+  "type": "page",
+  "id": "orders",
+  "slot": "content",
+  "title": "我的订单",
+  "description": "全部订阅与商城订单",
+  "component": "page-view",
+  "children": [
+    {
+      "component": "card",
+      "children": [
+        {
+          "slot": "header",
+          "component": "card-header",
+          "children": [
+            { "component": "card-title", "text": "订单记录" },
+            { "component": "card-description", "text": "点击列头可排序，支持关键词过滤" }
+          ]
+        },
+        {
+          "slot": "default",
+          "component": "table",
+          "id": "orderTable",
+          "rows": "/systems/userfront/data/my-orders.json",
+          "searchable": true,
+          "sortable": true,
+          "paginated": true,
+          "pageSize": 8,
+          "column": [
+            { "component": "field-list", "field": "@@MyOrder.id" },
+            { "component": "field-list", "field": "@@MyOrder.product" },
+            { "component": "field-list", "field": "@@MyOrder.qty", "align": "right" },
+            { "component": "field-list", "field": "@@MyOrder.amount", "align": "right", "format": "currency" },
+            { "component": "field-list", "field": "@@MyOrder.date" },
+            { "component": "field-list", "field": "@@MyOrder.status" }
+          ]
+        }
+      ]
+    }
+  ]
+}

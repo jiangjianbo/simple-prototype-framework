@@ -1,0 +1,45 @@
+{
+  "type": "page",
+  "id": "profile",
+  "slot": "content",
+  "title": "个人资料",
+  "description": "维护你在组织内的基本信息",
+  "note": "表单字段由 @@Profile 模型展开（经 ts-morph 元数据），新增字段先改 models/Profile.ts 再回页面。",
+  "component": "page-view",
+  "children": [
+    {
+      "component": "card",
+      "children": [
+        {
+          "slot": "header",
+          "component": "card-header",
+          "children": [
+            { "component": "card-title", "text": "基本信息" },
+            { "component": "card-description", "text": "带 * 的字段提交后需要管理员审核" }
+          ]
+        },
+        {
+          "slot": "default",
+          "component": "form",
+          "id": "profileForm",
+          "model": "@@Profile",
+          "mode": "edit",
+          "columns": 2,
+          "value": "/systems/userfront/data/profile.json",
+          "children": [
+            {
+              "slot": "footer",
+              "component": "row",
+              "template": "auto auto",
+              "gap": 10,
+              "children": [
+                { "component": "button", "text": "保存修改", "variant": "primary", "note": "保存动作接状态机后可用 @goto 或 engine 事件驱动，当前为静态演示。" },
+                { "component": "button", "text": "重置", "variant": "outline" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

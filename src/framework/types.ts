@@ -39,6 +39,10 @@ export interface Node {
   '@goto'?: string
   stateMachine?: string | { scope?: string; src: string }[]
   constants?: Record<string, any>
+  /** 设计说明（§14）：悬浮元素时在浮动框中展示，不透传为 props */
+  note?: string
+  /** 节点定义拆分引用（§4.6）：值为相对 systems/<系统id>/ 的路径或 / 开头完整 Web 路径，加载期内联 */
+  '$ref'?: string
   [key: string]: any
 }
 

@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-vue-next'
 import { appState, boot, rootCtx } from '@/framework/app-store'
 import { kitState } from '@/framework/kit-store'
 import { NodeRenderer } from '@/framework/renderer'
+import AnnotationLayer from '@/components/framework/annotation/AnnotationLayer.vue'
 
 onMounted(boot)
 
@@ -28,4 +29,7 @@ const remountKey = computed(() => `${appState.system}:${kitState.kit}`)
   </div>
 
   <NodeRenderer v-else-if="appState.desktop" :key="remountKey" :node="appState.desktop" :ctx="rootCtx" />
+
+  <!-- 标注层（§14）：悬浮标注图标 + 设计说明面板 + 标注对话框；keyed NodeRenderer 之外，切套件不重挂 -->
+  <AnnotationLayer v-if="appState.status === 'ready'" />
 </template>

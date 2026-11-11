@@ -193,6 +193,13 @@ html[data-theme='deckurate'] {
   animation: pp-fade-in 0.14s ease-out;
 }
 
+/* 标注定位高亮（全部标注 → 定位）：主题色描边，2s 后移除 */
+.pp-locate-flash {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Unovis 容器兜底 */
 .vis-single-container,
 .vis-x-y-container {

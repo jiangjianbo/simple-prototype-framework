@@ -19,10 +19,10 @@ JSON 驱动原型系统：页面用 JSON 配置描述（契约名 + 数据引用
 ## 常用命令
 
 ```bash
-npx vitest run            # 全量测试（约 60-70s，24 条，6 个文件）
+npx vitest run            # 全量测试（约 60-90s，63 条，12 个文件）
 npx vitest run tests/xxx.test.ts   # 单文件
 npx vue-tsc --noEmit      # 类型检查（提交前必跑）
-npm run dev               # 元数据生成 + vite 开发服务器
+npm run dev               # 元数据生成 + vite 开发服务器（改 systems/ 自动整页刷新，URL hash 保位）
 npm run build             # 元数据生成 + vite build + 静态单文件构建到 dist/<系统id>/index.html
 ```
 
@@ -34,7 +34,7 @@ npm run build             # 元数据生成 + vite build + 静态单文件构建
 - **套件（Kit）**：`src/kits/shadcn.ts`（默认+兜底，全量）、`src/kits/plain.ts`（极简，部分覆盖）。套件可只实现想覆盖的契约名，未覆盖的回落 shadcn；继承的复合件（schema-form/table/tabs）内部经契约解析取原语，自动随套件变形。新增套件步骤见组件规范 §7。
 - **主题（Theme）**：CSS 变量（`src/style.css`），与套件正交。dark 用 `html.dark` class，其余用 `data-theme` 属性。
 - **场景布局（Scene Layout）**：每个界面的最底层布局（`app-layout` 主应用 / `login-layout` 登录 / `screen-layout` 大屏），统一 `controls` 槽承载切换控件簇，留空回落契约组件 `layout-controls`。
-- **目录**：`src/framework/`（引擎 + 复合件 + shadcn 布局）、`src/components/ui/`（reka-ui 原语）、`src/components/plain/`（plain 原语）、`systems/<id>/`（模型 models/、配置 menu/page.json、数据 data/）。页面节点分层：desktop → page → component → element。
+- **目录**：`src/framework/`（引擎 + 复合件 + shadcn 布局）、`src/components/ui/`（reka-ui 原语）、`src/components/plain/`（plain 原语）、`systems/<id>/`（模型 models/、配置 menu/page.json、数据 data/、状态机与拆分页面 pages/）。页面节点分层：desktop → page → component → element。
 
 ## 工作原则
 

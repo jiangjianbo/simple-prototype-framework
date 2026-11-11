@@ -20,6 +20,7 @@ import { expandTypeRef } from './metadata'
 import { isAttrRef, isAssetRef, isTypeRef, resolveAssetUrl, resolveAttr } from './resolver'
 import { navigate } from './navigation'
 import { ensurePageEngine } from './page-engine'
+import { buildNodePath } from './node-path'
 import FallbackDisplay from '@/components/framework/MissingComponent.vue'
 
 export const MODE_KEY: any = Symbol('pp-mode')
@@ -31,6 +32,7 @@ type VSlotMap = Record<string, () => VNode[]>
 const META_KEYS = new Set([
   'type', 'component', 'slot', 'children', 'data', 'mode', '@goto',
   'stateMachine', 'constants', '__smSrc', '__sm', 'column',
+  'note', '$ref',
 ])
 
 /** 内部消化 children 的复合组件（不走插槽分发） */
@@ -71,6 +73,12 @@ export function renderNode(node: Node, ctx: RenderContext): VNode | null {
     if (META_KEYS.has(k)) continue
     props[k] = v
   }
+
+  // ---- 标注探测属性（§14）：经 attr fallthrough 落到组件根 DOM，
+  //      标注层（AnnotationLayer）以事件委托读取，悬浮定位/显示设计说明 ----
+  const probe = buildNodePath(ctx.scope, node)
+  props['data-pp-path'] = probe.path
+  if (typeof node.note === 'string' && node.note) props['data-pp-note'] = node.note
 
   // ---- data 引用解析（model 为 data 的别名，如表单 model="@@Profile"）----
   let data = node.data ?? node.model
