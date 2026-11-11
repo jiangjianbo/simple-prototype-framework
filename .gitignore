@@ -137,3 +137,4 @@ dist
 
 # 原型系统生成产物（npm run gen:metadata 重建）
 public/
+/.zcode
