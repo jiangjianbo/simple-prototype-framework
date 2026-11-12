@@ -63,6 +63,23 @@ describe('deckurate 原型新形态', () => {
     wrapper.unmount()
   }, 30000)
 
+  it('文库：工具栏内分隔线必须竖向（横向分隔线 w-full 会挤爆 flex 行布局）', async () => {
+    const wrapper = await mountApp()
+    await goto(wrapper, '文库')
+
+    const toolbar = wrapper.find('[data-slot="toolbar"]')
+    expect(toolbar.exists()).toBe(true)
+    expect(toolbar.text()).toContain('新建')
+    expect(toolbar.text()).toContain('上传')
+
+    const sep = toolbar.find('[data-slot="separator"]')
+    expect(sep.exists()).toBe(true)
+    // 横向分隔线带 data-[orientation=horizontal]:w-full，在 w-fit flex 行里
+    // 会占满整行并把后续子项（搜索框/标签列表）挤成窄条，标签换行竖堆撑高工具栏
+    expect(sep.attributes('data-orientation')).toBe('vertical')
+    wrapper.unmount()
+  }, 30000)
+
   it('文库：data-views 默认列表视图，切画廊出现卡片网格（10 张带封面）', async () => {
     const wrapper = await mountApp()
     await goto(wrapper, '文库')
@@ -121,6 +138,12 @@ describe('deckurate 原型新形态', () => {
 
     expect(wrapper.findAll('[data-slot="card-grid-item"]').length).toBe(12)
     expect(wrapper.find('[data-slot="card-grid"]').text()).toContain('新品发布')
+
+    // 纯文本数据（无任何行带封面）→ 不渲染媒体占位块（文件图标图形）
+    expect(wrapper.find('[data-slot="card-grid"] [data-slot="card-grid-media"]').exists()).toBe(false)
+    expect(wrapper.find('[data-slot="card-grid"] svg').exists()).toBe(false)
+    // 徽标（使用次数）不随媒体区一起消失，转内联展示
+    expect(wrapper.find('[data-slot="card-grid"]').text()).toContain('23')
     wrapper.unmount()
   }, 30000)
 })

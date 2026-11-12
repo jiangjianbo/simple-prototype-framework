@@ -151,7 +151,7 @@
             { "component": "button", "text": "上传", "variant": "outline" },
             { "component": "input", "placeholder": "搜索素材…", "class": "w-52" },
             { "component": "kbd", "text": "⌘K" },
-            { "component": "separator", "class": "mx-1 h-5" },
+            { "component": "separator", "orientation": "vertical", "class": "mx-1 h-5!" },
             { "component": "tag-list", "tags": ["新品发布", "产品介绍", "商务", "白皮书", "案例", "路演", "品牌"], "limit": 4, "clickable": true }
           ]
         },
